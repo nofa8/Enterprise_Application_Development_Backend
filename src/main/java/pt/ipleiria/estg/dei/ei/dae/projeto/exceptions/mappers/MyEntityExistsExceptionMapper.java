@@ -1,0 +1,20 @@
+package adgf.academics.exceptions.mappers;
+
+import adgf.academics.exceptions.MyEntityExistsException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+import java.util.logging.Logger;
+
+@Provider
+public class MyEntityExistsExceptionMapper implements ExceptionMapper<MyEntityExistsException> {
+    private static final Logger logger=Logger.getLogger(MyEntityExistsExceptionMapper.class.getName());
+
+    @Override
+    public Response toResponse(MyEntityExistsException e) {
+        String errorMsg = e.getMessage();
+        logger.warning("ERROR: " + errorMsg);
+        return Response.status(Response.Status.CONFLICT).entity(errorMsg).build();
+    }
+
+}
