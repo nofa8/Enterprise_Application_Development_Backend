@@ -1,8 +1,9 @@
-package adgf.academics.exceptions;
+package pt.ipleiria.estg.dei.ei.dae.projeto.exceptions;
 
-import java.util.stream.Collectors;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+
+import java.util.stream.Collectors;
 public class MyConstraintViolationException extends Exception {
     public MyConstraintViolationException(ConstraintViolationException e) {
         super(getConstraintViolationMessages(e));

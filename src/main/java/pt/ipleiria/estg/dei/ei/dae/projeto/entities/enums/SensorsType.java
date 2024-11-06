@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
+package pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums;
 
 public enum SensorsType {
     TEMPERATURE,

@@ -1,4 +1,4 @@
-package adgf.academics.exceptions;
+package pt.ipleiria.estg.dei.ei.dae.projeto.exceptions;
 
 public class MyEntityNotFoundException extends Exception {
 

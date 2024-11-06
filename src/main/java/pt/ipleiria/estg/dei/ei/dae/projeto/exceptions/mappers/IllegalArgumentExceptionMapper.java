@@ -1,4 +1,4 @@
-package adgf.academics.exceptions.mappers;
+package pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.mappers;
 
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;

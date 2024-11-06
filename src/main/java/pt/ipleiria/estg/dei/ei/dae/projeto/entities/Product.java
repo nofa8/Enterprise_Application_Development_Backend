@@ -1,40 +1,71 @@
 package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.Email;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.ProductType;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"nome"})
-}
+@Table(name = "products", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name"})
+    }
 )
-public class Produto  extends Versionable {
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllProducts",
+                query = "SELECT p FROM Product p ORDER BY p.code" // IF needed order by something else
+        )
+    }
+)
+public class Product extends Versionable {
 
     @Id
     private long  code;
     @NotBlank
-    private String nome;
+    private String name;
     @NotBlank
-    private String marca;
+    private String brand;
+
+    //private float price;
 
 
-    public Produto(long code, String nome, String marca) {
+
+    @NotNull
+    private ProductType type;
+
+    @ManyToOne
+    @NotNull
+    private Volume volume;
+
+    public Product(long code, String name, String brand, ProductType type, Volume volume) {
         this.code = code;
-        this.nome = nome;
-        this.marca = marca;
+        this.name = name;
+        this.brand = brand;
+        this.type = type;
+        this.volume = volume;
     }
 
-    public Produto() {
+    public Product() {
     }
 
+    public @NotNull ProductType getType() {
+        return type;
+    }
+
+    public void setType(@NotNull ProductType type) {
+        this.type = type;
+    }
+
+    public @NotNull Volume getVolume() {
+        return volume;
+    }
+
+    public void setVolume(@NotNull Volume volume) {
+        this.volume = volume;
+    }
 
     public long getCode() {
         return code;
@@ -44,20 +75,20 @@ public class Produto  extends Versionable {
         this.code = code;
     }
 
-    public @NotBlank String getNome() {
-        return nome;
+    public @NotBlank String getName() {
+        return name;
     }
 
-    public void setNome(@NotBlank String nome) {
-        this.nome = nome;
+    public void setName(@NotBlank String name) {
+        this.name = name;
     }
 
-    public @NotBlank String getMarca() {
-        return marca;
+    public @NotBlank String getBrand() {
+        return brand;
     }
 
-    public void setMarca(@NotBlank String marca) {
-        this.marca = marca;
+    public void setBrand(@NotBlank String brand) {
+        this.brand = brand;
     }
 
     @Override
@@ -67,7 +98,7 @@ public class Produto  extends Versionable {
 
     @Override
     public boolean equals(Object obj) {
-        return this.getCode() == ((Produto)obj).getCode();
+        return this.getCode() == ((Product)obj).getCode();
     }
 
 }

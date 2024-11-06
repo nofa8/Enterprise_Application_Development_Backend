@@ -3,35 +3,70 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.SensorsType;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Objects;
 
 @Entity
 @Table(name = "sensors", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"nome"})
+        @UniqueConstraint(columnNames = {"name"})
 }
 )
 @NamedQueries({
         @NamedQuery(
-                name = "getAllProducts",
-                query = "SELECT p FROM Produto p ORDER BY p.code" // IF needed order by something else
+                name = "getAllSensors",
+                query = "SELECT s FROM Sensor s ORDER BY s.type, s.code" // IF needed order by something else
         )
-}
+    }
 )
-public class Sensors extends Versionable{
+public class Sensor extends Versionable{
 
     @Id
     private long  code;
     @NotNull
-    private SensorsType tipo;
+    private SensorsType type;
     @NotBlank
-    private double value;
+    private String value;
+
+    @NotNull
+    private Date timestamp;
+
+    @ManyToOne
+    @NotNull
+    private Volume volume;
 
 
-
-
-    public Sensors() {
+    public Sensor(long code, SensorsType type, String value, Date timestamp, Volume volume) {
+        this.code = code;
+        this.type = type;
+        this.value = value;
+        this.timestamp = timestamp;
+        this.volume = volume;
     }
+
+    public Sensor() {
+    }
+
+
+    public @NotNull Volume getVolume() {
+        return volume;
+    }
+
+    public void setVolume(@NotNull Volume volume) {
+        this.volume = volume;
+    }
+
+    public @NotNull Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(@NotNull Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
+
 
 
     public long getCode() {
@@ -42,20 +77,21 @@ public class Sensors extends Versionable{
         this.code = code;
     }
 
-    public @NotBlank String getName() {
-        return name;
+    public @NotNull SensorsType getType() {
+        return type;
     }
 
-    public void setName(@NotBlank String name) {
-        this.name = name;
+    public void setType(@NotNull SensorsType type) {
+        this.type = type;
     }
 
-    public @NotBlank String getBrand() {
-        return brand;
+    @NotBlank
+    public String getValue() {
+        return value;
     }
 
-    public void setBrand(@NotBlank String brand) {
-        this.brand = brand;
+    public void setValue(@NotBlank String value) {
+        this.value = value;
     }
 
     @Override
@@ -65,6 +101,6 @@ public class Sensors extends Versionable{
 
     @Override
     public boolean equals(Object obj) {
-        return this.getCode() == ((Product)obj).getCode();
+        return this.getCode() == ((Sensor)obj).getCode();
     }
 }
