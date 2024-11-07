@@ -20,11 +20,11 @@ public class VolumeBean {
 
 
 
-    public void create(long code, VolumeState state, PackageType typePackage, long orderCode, Date timestamp)
+    public void create(long code, VolumeState state, long typePackage, long orderCode, Date timestamp)
             throws MyEntityExistsException, MyEntityNotFoundException {
 
         if (entityManager.find(Volume.class, code) != null){
-            throw new MyEntityNotFoundException("Volume with code " + code + " not found");
+            throw new MyEntityExistsException("Volume with code " + code + " already exists");
         }
 
         Order order = entityManager.find(Order.class,orderCode);
@@ -32,7 +32,12 @@ public class VolumeBean {
             throw new MyEntityNotFoundException("Order with code " + code + " not found");
         }
 
-        var volume = new Volume(code, state,typePackage,order,timestamp );
+        PackageType packageType = entityManager.find(PackageType.class,typePackage);
+        if ( packageType == null){
+            throw new MyEntityNotFoundException("Package Type with code " + code + " not found");
+        }
+
+        var volume = new Volume(code, state, packageType,order,timestamp );
 
         entityManager.persist(volume);
     }

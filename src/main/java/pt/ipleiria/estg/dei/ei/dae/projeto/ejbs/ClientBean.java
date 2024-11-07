@@ -29,7 +29,7 @@ public class ClientBean {
         entityManager.merge(client);
     }
     public void create(String username, String password, String name,
-                       String email) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
+                       String email) throws MyEntityExistsException, MyConstraintViolationException {
         if (entityManager.find(Client.class, username) != null) {
             throw new MyEntityExistsException("Client  '"+username+"' already exists!");
         }

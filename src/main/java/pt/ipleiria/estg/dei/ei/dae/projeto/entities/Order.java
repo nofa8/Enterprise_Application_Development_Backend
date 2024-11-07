@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.OrderState;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.SensorsType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,10 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "orders", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name"})
-}
-)
+@Table(name = "orders")
 @NamedQueries({
         @NamedQuery(
                 name = "getAllOrders",
@@ -26,11 +24,10 @@ import java.util.Objects;
 public class Order extends Versionable {
     @Id
     private long  code;
-
-
     //private float price;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private OrderState state;
 
     @NotNull
@@ -56,10 +53,27 @@ public class Order extends Versionable {
 
     }
 
+
+
     public Order() {
         volumes = new ArrayList<>();
     }
+    public void addVolume(Volume volume) {
+        if ( volume == null || volumes.contains(volume)  ){
+            return;
+        }
 
+        volumes.add(volume);
+    }
+
+    public void removeVolume(Volume sensor) {
+
+        if ( sensor == null || !volumes.contains(sensor)  ){
+            return;
+        }
+
+        volumes.remove(sensor);
+    }
     public @NotNull Date getPurchaseDate() {
         return purchaseDate;
     }

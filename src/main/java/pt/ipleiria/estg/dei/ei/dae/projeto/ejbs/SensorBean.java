@@ -21,7 +21,7 @@ public class SensorBean {
             throws MyEntityExistsException, MyEntityNotFoundException {
 
         if (entityManager.find(Sensor.class, code) != null){
-            throw new MyEntityNotFoundException("Sensor with code " + code + " not found");
+            throw new MyEntityExistsException("Sensor with code " + code + " already exists");
         }
 
         Volume volume1 = entityManager.find(Volume.class,volumeCode);

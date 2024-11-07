@@ -28,6 +28,24 @@ public class Client extends  User {
         orders = new ArrayList<>();
     }
 
+
+    public void addOrder(Order order) {
+        if ( order == null || orders.contains(order)  ){
+            return;
+        }
+
+        orders.add(order);
+    }
+
+    public void removeOrder(Order order) {
+
+        if ( order == null || !orders.contains(order)  ){
+            return;
+        }
+
+        orders.remove(order);
+    }
+
     public List<Order> getOrders() {
         return new ArrayList<>(orders);
     }

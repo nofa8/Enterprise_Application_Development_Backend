@@ -19,11 +19,11 @@ public class ProductBean {
 
     //long code, String name, String brand, ProductType type, Volume volume
 
-    public void create(long code, String name, String brand, ProductType type, long volumeCode)
+    public void create(long code, String name, String brand, float price, String description, long codeProductType, long volumeCode)
             throws MyEntityExistsException, MyEntityNotFoundException {
 
         if (entityManager.find(Product.class, code) != null){
-            throw new MyEntityNotFoundException("Product with code " + code + " not found");
+            throw new MyEntityExistsException("Product with code " + code + " already exists");
         }
 
         Volume volume = entityManager.find(Volume.class, volumeCode);
@@ -31,7 +31,12 @@ public class ProductBean {
             throw new MyEntityNotFoundException("Volume with code " + code + " not found");
         }
 
-        var product = new Product(code,  name,  brand,  type,volume);
+        ProductType productType = entityManager.find(ProductType.class, codeProductType);
+        if ( productType == null){
+            throw new MyEntityNotFoundException("Product Type with code " + code + " not found");
+        }
+
+        var product = new Product(code,  name,  brand, price, description, productType ,volume);
 
         entityManager.persist(product);
     }
@@ -52,14 +57,16 @@ public class ProductBean {
         entityManager.remove(entityManager.find(Product.class, product));
     }
 
-    public void update(long code, String name, String brand, ProductType type, long volumeCode) {
+    public void update(long code, String name, String brand, float price, String description, long codeProductType, long volumeCode) {
         Product product = entityManager.find(Product.class, code);
         if (product == null || !entityManager.contains(product)){
             return;
         }
         product.setName(name);
         product.setBrand(brand);
-        product.setType(type);
+        product.setPrice(price);
+        product.setDescription(description);
+        product.setType(entityManager.find(ProductType.class,codeProductType));
         product.setVolume(entityManager.find(Volume.class,volumeCode));
         entityManager.merge(product);
     }

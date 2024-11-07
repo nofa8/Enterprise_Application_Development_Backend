@@ -11,10 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "volumes", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name"})
-}
-)
+@Table(name = "volumes")
 @NamedQueries({
         @NamedQuery(
                 name = "getAllVolumes",
@@ -27,9 +24,11 @@ public class Volume extends Versionable {
     private long  code;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private VolumeState state;
 
     @NotNull
+    @ManyToOne
     private PackageType typePackage;
 
 
@@ -64,6 +63,40 @@ public class Volume extends Versionable {
         products = new ArrayList<>();
     }
 
+
+    public void addProduct(Product product) {
+        if ( product == null || products.contains(product)  ){
+            return;
+        }
+
+        products.add(product);
+    }
+
+    public void removeProduct(Product product) {
+
+        if ( product == null || !products.contains(product)  ){
+            return;
+        }
+
+        products.remove(product);
+    }
+
+    public void addSensor(Sensor sensor) {
+        if ( sensor == null || sensors.contains(sensor)  ){
+            return;
+        }
+
+        sensors.add(sensor);
+    }
+
+    public void removeSensor(Sensor sensor) {
+
+        if ( sensor == null || !sensors.contains(sensor)  ){
+            return;
+        }
+
+        sensors.remove(sensor);
+    }
 
     public @NotNull Date getTimestamp() {
         return timestamp;

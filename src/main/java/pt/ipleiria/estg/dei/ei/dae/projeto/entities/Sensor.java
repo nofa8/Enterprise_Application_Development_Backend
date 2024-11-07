@@ -10,10 +10,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 @Entity
-@Table(name = "sensors", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name"})
-}
-)
+@Table(name = "sensors")
 @NamedQueries({
         @NamedQuery(
                 name = "getAllSensors",
@@ -26,6 +23,7 @@ public class Sensor extends Versionable{
     @Id
     private long  code;
     @NotNull
+    @Enumerated(EnumType.STRING)
     private SensorsType type;
     @NotBlank
     private String value;
