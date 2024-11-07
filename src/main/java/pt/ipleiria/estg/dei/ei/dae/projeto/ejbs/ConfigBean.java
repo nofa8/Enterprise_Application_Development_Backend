@@ -68,7 +68,7 @@ public class ConfigBean {
             packageTypeBean.create(3);
             packageTypeBean.create(4);
 
-            orderBean.create(1, OrderState.PROCESSED, Date.from(Instant.now()),Date.from(Instant.now()), "username" );
+            orderBean.create(1,1.2f, OrderState.PROCESSED, Date.from(Instant.now()),Date.from(Instant.now()), "username" );
 
             volumeBean.create(1, VolumeState.PACKED,1 ,1,Date.from(Instant.now()));
 

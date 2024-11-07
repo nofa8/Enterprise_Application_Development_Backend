@@ -22,7 +22,7 @@ public class OrderBean {
     @EJB
     private ClientBean clientBean;
 
-    public void create(long code, OrderState state, Date purchaseDate, Date timestamp, String clientUsername)
+    public void create(long code, float price, OrderState state, Date purchaseDate, Date timestamp, String clientUsername)
             throws MyEntityExistsException, MyEntityNotFoundException {
 
         if (entityManager.find(Order.class, code) != null){
@@ -34,7 +34,7 @@ public class OrderBean {
             throw new MyEntityNotFoundException("Client with username " + clientUsername + " not found");
         }
 
-        var order = new Order(code,  state, purchaseDate, timestamp,  client);
+        var order = new Order(code, price,  state, purchaseDate, timestamp,  client);
 
         entityManager.persist(order);
     }
@@ -55,11 +55,12 @@ public class OrderBean {
         entityManager.remove(entityManager.find(Order.class, order));
     }
 
-    public void update(long code, OrderState state, Date timestamp, String username) {
+    public void update(long code,float price, OrderState state, Date timestamp, String username) {
         Order order = entityManager.find(Order.class, code);
         if (order == null || !entityManager.contains(order)){
             return;
         }
+        order.setPrice(price);
         order.setState(state);
         order.setTimestamp(timestamp);
         order.setClient(clientBean.find(username));

@@ -18,7 +18,7 @@ import java.util.List;
 public class PackageType extends Versionable {
 
     @Id
-    private long  code;
+    private long code;
 
     @ElementCollection(targetClass = SensorsType.class)
     @CollectionTable(name = "package_sensors", joinColumns = @JoinColumn(name = "package_code"))

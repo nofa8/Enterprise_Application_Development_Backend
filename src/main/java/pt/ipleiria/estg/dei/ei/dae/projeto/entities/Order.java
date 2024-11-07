@@ -3,6 +3,7 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.OrderState;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.SensorsType;
@@ -24,7 +25,9 @@ import java.util.Objects;
 public class Order extends Versionable {
     @Id
     private long  code;
-    //private float price;
+
+    @NotEmpty
+    private float price;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -43,8 +46,9 @@ public class Order extends Versionable {
     @ManyToOne
     private Client  client;
 
-    public Order(long code, OrderState state, Date purchaseDate, Date timestamp, Client client) {
+    public Order(long code, float price, OrderState state, Date purchaseDate, Date timestamp, Client client) {
         this.code = code;
+        this.price = price;
         this.state = state;
         this.purchaseDate = purchaseDate;
         this.timestamp = timestamp;
@@ -52,8 +56,6 @@ public class Order extends Versionable {
         volumes = new ArrayList<>();
 
     }
-
-
 
     public Order() {
         volumes = new ArrayList<>();
@@ -64,6 +66,15 @@ public class Order extends Versionable {
         }
 
         volumes.add(volume);
+    }
+
+    @NotEmpty
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(@NotEmpty float price) {
+        this.price = price;
     }
 
     public void removeVolume(Volume sensor) {
