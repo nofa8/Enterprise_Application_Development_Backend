@@ -1,20 +1,15 @@
 package pt.ipleiria.estg.dei.ei.dae.projeto.ejbs;
 
 
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Client;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Product;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.ProductType;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Volume;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.OrderState;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.ProductType;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityNotFoundException;
 
-import java.util.Date;
 import java.util.List;
 
 @Stateless

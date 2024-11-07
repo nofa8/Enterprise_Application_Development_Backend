@@ -3,12 +3,9 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.ejbs;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Volume;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.PackageType;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.SensorsType;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityNotFoundException;
 

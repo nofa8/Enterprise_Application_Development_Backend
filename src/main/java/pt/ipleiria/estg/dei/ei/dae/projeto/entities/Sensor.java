@@ -38,6 +38,7 @@ public class Sensor extends Versionable{
     private Volume volume;
 
 
+
     public Sensor(long code, SensorsType type, String value, Date timestamp, Volume volume) {
         this.code = code;
         this.type = type;
