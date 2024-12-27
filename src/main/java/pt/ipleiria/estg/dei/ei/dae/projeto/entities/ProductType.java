@@ -2,15 +2,12 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.SensorsType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "producttypes")
+@Table(name = "product_types")
 @NamedQueries({
         @NamedQuery(
                 name = "getAllProductTypes",
@@ -23,10 +20,12 @@ public class ProductType extends Versionable{
     @Id
     private long  code;
 
-    @ElementCollection(targetClass = SensorsType.class)
-    @CollectionTable(name = "product_sensors", joinColumns = @JoinColumn(name = "product_code"))
-    @Column(name = "sensor_type")
-    @Enumerated(EnumType.STRING) // Stores the enum values as strings
+    @ManyToMany
+    @JoinTable(
+            name = "product_sensor_mapping",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "sensor_id")
+    )
     private List<SensorsType> sensors;
 
     @OneToMany(mappedBy = "type")
@@ -81,16 +80,13 @@ public class ProductType extends Versionable{
         if ( sensor == null || sensors.contains(sensor)  ){
             return;
         }
-
         sensors.add(sensor);
     }
 
     public void removeSensorsType(SensorsType sensor) {
-
         if ( sensor == null || !sensors.contains(sensor)  ){
             return;
         }
-
         sensors.remove(sensor);
     }
 

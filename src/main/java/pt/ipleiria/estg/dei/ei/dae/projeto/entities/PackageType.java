@@ -1,7 +1,7 @@
 package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 import jakarta.persistence.*;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.SensorsType;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,15 @@ public class PackageType extends Versionable {
     @Id
     private long code;
 
-    @ElementCollection(targetClass = SensorsType.class)
-    @CollectionTable(name = "package_sensors", joinColumns = @JoinColumn(name = "package_code"))
-    @Column(name = "sensor_type")
-    @Enumerated(EnumType.STRING) // Stores the enum values as strings
+    @NotBlank
+    private String name;
+
+    @ManyToMany
+    @JoinTable(
+            name = "package_sensor_mapping",
+            joinColumns = @JoinColumn(name = "package_id"),
+            inverseJoinColumns = @JoinColumn(name = "sensor_id")
+    )
     private List<SensorsType> sensors;
 
 
@@ -31,8 +36,9 @@ public class PackageType extends Versionable {
     private List<Volume> volumes;
 
 
-    public PackageType(long code) {
+    public PackageType(long code, String name) {
         this.code = code;
+        this.name = name;
         this.sensors = new ArrayList<>();
         this.volumes = new ArrayList<>();
     }
@@ -58,6 +64,15 @@ public class PackageType extends Versionable {
 
         volumes.remove(sensor);
     }
+
+    public @NotBlank String getName() {
+        return name;
+    }
+
+    public void setName(@NotBlank String name) {
+        this.name = name;
+    }
+
     public void addSensorsType(SensorsType sensor) {
         if ( sensor == null || sensors.contains(sensor)  ){
             return;
@@ -67,14 +82,11 @@ public class PackageType extends Versionable {
     }
 
     public void removeSensorsType(SensorsType sensor) {
-
         if ( sensor == null || !sensors.contains(sensor)  ){
             return;
         }
-
         sensors.remove(sensor);
     }
-
 
     public long getCode() {
         return code;

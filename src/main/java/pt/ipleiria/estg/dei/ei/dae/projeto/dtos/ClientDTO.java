@@ -14,14 +14,13 @@ import java.util.stream.Collectors;
 public class ClientDTO implements Serializable {
 
     @Id
-    private String username;
+    private String email;
+
     private String password;
     private String name;
-    private String email;
     private List<Order> orders;
 
-    public ClientDTO(String username, String password, String name, String email) {
-        this.username = username;
+    public ClientDTO( String email, String password, String name) {
         this.password = password;
         this.name = name;
         this.email = email;
@@ -39,13 +38,7 @@ public class ClientDTO implements Serializable {
         return  new ArrayList<>(orders);
     }
 
-    public String getUsername() {
-        return username;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getPassword() {
         return password;
@@ -73,10 +66,9 @@ public class ClientDTO implements Serializable {
 
     public static ClientDTO from(Client client) {
         return new ClientDTO(
-                client.getUsername(),
+                client.getEmail(),
                 client.getPassword(),
-                client.getName(),
-                client.getEmail()
+                client.getName()
         );
     }
     // converts an entire list of entities into a list of DTOs

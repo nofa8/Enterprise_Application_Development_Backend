@@ -15,7 +15,7 @@ import java.util.Objects;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllVolumes",
-                query = "SELECT v FROM Volume v ORDER BY o.code"
+                query = "SELECT v FROM Volume v ORDER BY v.code"
         )
 }
 )
@@ -27,6 +27,7 @@ public class Volume extends Versionable {
     @Enumerated(EnumType.STRING)
     private VolumeState state;
 
+    // criar classe com sensores associados
     @NotNull
     @ManyToOne
     private PackageType typePackage;

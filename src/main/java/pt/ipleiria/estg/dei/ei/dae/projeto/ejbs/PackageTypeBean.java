@@ -15,14 +15,14 @@ public class PackageTypeBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(long code)
+    public void create(long code, String name)
             throws MyEntityExistsException, MyEntityNotFoundException {
 
         if (entityManager.find(PackageType.class, code) != null){
             throw new MyEntityExistsException("Package Type with code " + code + " already exists");
         }
 
-        var packageType = new PackageType(code);
+        var packageType = new PackageType(code, name);
 
         entityManager.persist(packageType);
     }
