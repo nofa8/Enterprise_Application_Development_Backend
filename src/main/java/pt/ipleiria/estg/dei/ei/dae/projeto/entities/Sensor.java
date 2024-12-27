@@ -30,7 +30,6 @@ public class Sensor extends Versionable{
     private Date timestamp;
 
     @ManyToOne
-    @NotNull
     private Volume volume;
 
 

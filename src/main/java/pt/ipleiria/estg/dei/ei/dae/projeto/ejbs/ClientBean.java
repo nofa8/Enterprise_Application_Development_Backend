@@ -34,7 +34,7 @@ public class ClientBean {
         }
 
         try {
-            var client = new Client( password, name, email);
+            var client = new Client( email, password, name);
             entityManager.persist(client);
             entityManager.flush(); // when using Hibernate, to force it to throw ConstraintViolationException, as in the JPA specification
         } catch (ConstraintViolationException e) {

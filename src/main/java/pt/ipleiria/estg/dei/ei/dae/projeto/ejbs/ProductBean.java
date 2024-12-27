@@ -4,9 +4,11 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.ejbs;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Product;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.ProductType;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Volume;
+import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityNotFoundException;
 
@@ -20,25 +22,30 @@ public class ProductBean {
     //long code, String name, String brand, ProductType type, Volume volume
 
     public void create(long code, String name, String brand, float price, String description, long codeProductType, long volumeCode)
-            throws MyEntityExistsException, MyEntityNotFoundException {
+            throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
 
-        if (entityManager.find(Product.class, code) != null){
+        if (entityManager.find(Product.class, code) != null) {
             throw new MyEntityExistsException("Product with code " + code + " already exists");
         }
 
         Volume volume = entityManager.find(Volume.class, volumeCode);
-        if ( volume == null){
+        if (volume == null) {
             throw new MyEntityNotFoundException("Volume with code " + code + " not found");
         }
 
         ProductType productType = entityManager.find(ProductType.class, codeProductType);
-        if ( productType == null){
+        if (productType == null) {
             throw new MyEntityNotFoundException("Product Type with code " + code + " not found");
         }
 
-        var product = new Product(code,  name,  brand, price, description, productType ,volume);
+        try {
+            var product = new Product(code, name, brand, price, description, productType, volume);
 
-        entityManager.persist(product);
+            entityManager.persist(product);
+
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
     }
 
     public List<Product> findAll() {

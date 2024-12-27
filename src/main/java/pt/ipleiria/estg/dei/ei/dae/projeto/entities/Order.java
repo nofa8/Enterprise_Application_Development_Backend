@@ -2,8 +2,8 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.OrderState;
 
 import java.util.ArrayList;
@@ -24,7 +24,8 @@ public class Order extends Versionable {
     @Id
     private long  code;
 
-    @NotEmpty
+    @NotNull
+    @Positive
     private float price;
 
     @NotNull
@@ -66,12 +67,11 @@ public class Order extends Versionable {
         volumes.add(volume);
     }
 
-    @NotEmpty
     public float getPrice() {
         return price;
     }
 
-    public void setPrice(@NotEmpty float price) {
+    public void setPrice( float price) {
         this.price = price;
     }
 

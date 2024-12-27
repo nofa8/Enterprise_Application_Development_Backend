@@ -22,16 +22,16 @@ public class OrderBean {
     @EJB
     private ClientBean clientBean;
 
-    public void create(long code, float price, OrderState state, Date purchaseDate, Date timestamp, String clientUsername)
+    public void create(long code, float price, OrderState state, Date purchaseDate, Date timestamp, String clientEmail)
             throws MyEntityExistsException, MyEntityNotFoundException {
 
         if (entityManager.find(Order.class, code) != null){
             throw new MyEntityExistsException("Order with code " + code + " already exists");
         }
 
-        Client client = entityManager.find(Client.class, clientUsername);
+        Client client = entityManager.find(Client.class, clientEmail);
         if ( client == null){
-            throw new MyEntityNotFoundException("Client with username " + clientUsername + " not found");
+            throw new MyEntityNotFoundException("Client with email " + clientEmail + " not found");
         }
 
         var order = new Order(code, price,  state, purchaseDate, timestamp,  client);

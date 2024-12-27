@@ -3,8 +3,8 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.util.Objects;
 
@@ -26,7 +26,8 @@ public class Product extends Versionable {
     @NotBlank
     private String brand;
 
-    @NotEmpty
+    @NotNull
+    @Positive
     private float price;
 
     @NotBlank
@@ -54,12 +55,11 @@ public class Product extends Versionable {
     }
 
 
-    @NotEmpty
     public float getPrice() {
         return price;
     }
 
-    public void setPrice(@NotEmpty float price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 

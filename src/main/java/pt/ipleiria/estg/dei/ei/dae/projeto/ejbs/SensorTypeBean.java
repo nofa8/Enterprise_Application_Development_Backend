@@ -25,7 +25,6 @@ public class SensorTypeBean {
         try {
             var sensorType = new SensorsType(id, name);
             entityManager.persist(sensorType);
-            entityManager.flush(); // Forces the persistence provider to check constraints
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
