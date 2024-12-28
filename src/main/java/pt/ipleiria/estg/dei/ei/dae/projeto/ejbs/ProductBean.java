@@ -21,16 +21,11 @@ public class ProductBean {
 
     //long code, String name, String brand, ProductType type, Volume volume
 
-    public void create(long code, String name, String brand, float price, String description, long codeProductType, long volumeCode)
+    public void create(long code, String name, String brand, float price, String description, long codeProductType)
             throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
 
         if (entityManager.find(Product.class, code) != null) {
             throw new MyEntityExistsException("Product with code " + code + " already exists");
-        }
-
-        Volume volume = entityManager.find(Volume.class, volumeCode);
-        if (volume == null) {
-            throw new MyEntityNotFoundException("Volume with code " + code + " not found");
         }
 
         ProductType productType = entityManager.find(ProductType.class, codeProductType);
@@ -39,7 +34,7 @@ public class ProductBean {
         }
 
         try {
-            var product = new Product(code, name, brand, price, description, productType, volume);
+            var product = new Product(code, name, brand, price, description, productType);
 
             entityManager.persist(product);
 
@@ -75,7 +70,6 @@ public class ProductBean {
             product.setPrice(price);
             product.setDescription(description);
             product.setType(entityManager.find(ProductType.class, codeProductType));
-            product.setVolume(entityManager.find(Volume.class, volumeCode));
             entityManager.merge(product);
         }catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);

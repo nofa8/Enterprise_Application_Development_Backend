@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -37,21 +39,26 @@ public class Product extends Versionable {
     @ManyToOne
     private ProductType type;
 
-    @ManyToOne
-    @NotNull
-    private Volume volume;
+    @ManyToMany
+    @JoinTable(
+            name = "product_volume",
+            joinColumns = @JoinColumn(name = "volume_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Volume> volumes;
 
-    public Product(long code, String name, String brand, float price, String description, ProductType type, Volume volume) {
+    public Product(long code, String name, String brand, float price, String description, ProductType type) {
         this.code = code;
         this.name = name;
         this.brand = brand;
         this.price = price;
         this.description = description;
         this.type = type;
-        this.volume = volume;
+        this.volumes = new ArrayList<>();
     }
 
     public Product() {
+        this.volumes = new ArrayList<>();
     }
 
 
@@ -79,13 +86,11 @@ public class Product extends Versionable {
         this.type = type;
     }
 
-    public @NotNull Volume getVolume() {
-        return volume;
+    public @NotNull List<Volume> getVolume() {
+        return new ArrayList<>(volumes);
     }
 
-    public void setVolume(@NotNull Volume volume) {
-        this.volume = volume;
-    }
+
 
     public long getCode() {
         return code;
@@ -110,6 +115,20 @@ public class Product extends Versionable {
     public void setBrand(@NotBlank String brand) {
         this.brand = brand;
     }
+
+    public void addVolume(Volume volume) {
+        if ( volume == null || volumes.contains(volume)  ){
+            return;
+        }
+        volumes.add(volume);
+    }
+    public void removeVolune(Volume volume) {
+        if ( volume == null || !volumes.contains(volume)  ){
+            return;
+        }
+        volumes.remove(volume);
+    }
+
 
     @Override
     public int hashCode() {

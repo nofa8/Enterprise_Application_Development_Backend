@@ -4,6 +4,7 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -20,13 +21,8 @@ public class ProductType extends Versionable{
     @Id
     private long  code;
 
-    @ManyToMany
-    @JoinTable(
-            name = "product_sensor_mapping",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "sensor_id")
-    )
-    private List<SensorsType> sensors;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductSensorMapping> sensors;
 
     @OneToMany(mappedBy = "type")
     private List<Product> products;
@@ -72,24 +68,56 @@ public class ProductType extends Versionable{
         products.remove(product);
     }
 
-    public List<SensorsType> getSensors() {
-        return new ArrayList<>(sensors);
+    public List<ProductSensorMapping> getSensors() {
+        // Return an unmodifiable list of SensorsType extracted from the ProductSensorMapping
+        return Collections.unmodifiableList(sensors);
     }
 
-    public void addSensorsType(SensorsType sensor) {
-        if ( sensor == null || sensors.contains(sensor)  ){
+    public void addSensor(SensorsType sensor, int quantity) {
+        if (sensor == null) {
+            throw new IllegalArgumentException("Sensor cannot be null");
+        }
+
+        // Check if the sensor is already in the list
+        boolean exists = sensors.stream()
+                .anyMatch(mapping -> mapping.getSensor().equals(sensor));
+
+        if (exists) {
+            throw new IllegalStateException("Sensor is already associated with this product.");
+        }
+
+        // Add new mapping
+        ProductSensorMapping mapping = new ProductSensorMapping(this, sensor, quantity);
+        sensors.add(mapping);
+    }
+
+    public void updateSensorQuantity(SensorsType sensor, int quantity) {
+        if (sensor == null) {
+            throw new IllegalArgumentException("Sensor cannot be null");
+        }
+
+        // Find the mapping for the specified sensor
+        ProductSensorMapping mapping = sensors.stream()
+                .filter(m -> m.getSensor().equals(sensor))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Sensor is not associated with this product."));
+
+        // Update the quantity
+        mapping.setQuantity(quantity);
+    }
+
+    public void removeSensor(SensorsType sensor) {
+        if (sensor == null) {
             return;
         }
-        sensors.add(sensor);
+
+        // Find the mapping for the specified sensor
+        ProductSensorMapping mapping = sensors.stream()
+                .filter(m -> m.getSensor().equals(sensor))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Sensor is not associated with this product."));
+
+        // Remove the mapping
+        sensors.remove(mapping);
     }
-
-    public void removeSensorsType(SensorsType sensor) {
-        if ( sensor == null || !sensors.contains(sensor)  ){
-            return;
-        }
-        sensors.remove(sensor);
-    }
-
-
-
 }

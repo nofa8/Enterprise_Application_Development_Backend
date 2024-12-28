@@ -75,13 +75,6 @@ public class ConfigBean {
             sensorTypeBean.create(7, "Infrared Sensor");
             sensorTypeBean.create(8, "Ultrasonic Sensor");
 
-            // Existing Sensors
-            sensorBean.create(1, 1, "20", Date.from(Instant.now()), 1);
-            sensorBean.create(2, 2, "30", Date.from(Instant.now()), 2);
-            sensorBean.create(3, 3, "40", Date.from(Instant.now()), 3);
-            sensorBean.create(4, 4, "50", Date.from(Instant.now()), 4);
-            sensorBean.create(5, 5, "60", Date.from(Instant.now()), 5);
-
 
             // Existing Product Types
             productTypeBean.create(1);
@@ -112,6 +105,8 @@ public class ConfigBean {
             orderBean.create(4, 4.0f, OrderState.IN_TRANSIT, Date.from(Instant.now()), Date.from(Instant.now()), "email3@email.com");
             orderBean.create(5, 5.5f, OrderState.PROCESSED, Date.from(Instant.now()), Date.from(Instant.now()), "email4@email.com");
 
+
+
             // Existing Volumes
             volumeBean.create(1, VolumeState.PACKED, 1, 1, Date.from(Instant.now()));
             volumeBean.create(2, VolumeState.PACKED, 2, 2, Date.from(Instant.now()));
@@ -119,12 +114,21 @@ public class ConfigBean {
             volumeBean.create(4, VolumeState.DELIVERED, 4, 4, Date.from(Instant.now()));
             volumeBean.create(5, VolumeState.IN_TRANSIT, 5, 5, Date.from(Instant.now()));
 
+            // Existing Sensors
+            sensorBean.create(1, 1, "20", Date.from(Instant.now()), 1);
+            sensorBean.create(2, 2, "30", Date.from(Instant.now()), 2);
+            sensorBean.create(3, 3, "40", Date.from(Instant.now()), 3);
+            sensorBean.create(4, 4, "50", Date.from(Instant.now()), 4);
+            sensorBean.create(5, 5, "60", Date.from(Instant.now()), 5);
+
+
+
             // Existing Products
-            productBean.create(111, "Primeiro", "Volkswagen", 1, "Grande PóPó", 1, 1);
-            productBean.create(112, "Segundo", "Ford", 2, "Compacto", 2, 2);
-            productBean.create(113, "Terceiro", "Tesla", 3, "Elétrico", 3, 3);
-            productBean.create(114, "Quarto", "Toyota", 4, "Híbrido", 4, 4);
-            productBean.create(115, "Quinto", "Honda", 5, "SUV", 5, 5);
+            productBean.create(111, "Primeiro", "Volkswagen", 1, "Grande PóPó", 1);
+            productBean.create(112, "Segundo", "Ford", 2, "Compacto", 2);
+            productBean.create(113, "Terceiro", "Tesla", 3, "Elétrico", 3);
+            productBean.create(114, "Quarto", "Toyota", 4, "Híbrido", 4);
+            productBean.create(115, "Quinto", "Honda", 5, "SUV", 5);
 
 
         } catch (Exception e) {

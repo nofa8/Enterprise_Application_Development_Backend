@@ -7,6 +7,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Client;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Manager;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityNotFoundException;
@@ -68,5 +69,6 @@ public class ClientBean {
     public void delete(String client) {
         entityManager.remove(entityManager.find(Client.class, client));
     }
+
 
 }

@@ -45,9 +45,9 @@ public class Volume extends Versionable {
     @OneToMany(mappedBy = "volume")
     private List<Sensor> sensors;
 
-    @NotNull
-    @OneToMany(mappedBy = "volume")
+    @ManyToMany(mappedBy = "volumes")
     private List<Product> products;
+
 
     public Volume(long code, VolumeState state, PackageType typePackage, Order order, Date timestamp) {
         this.code = code;

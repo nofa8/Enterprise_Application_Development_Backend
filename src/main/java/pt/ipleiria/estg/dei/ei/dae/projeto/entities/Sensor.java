@@ -32,8 +32,6 @@ public class Sensor extends Versionable{
     @ManyToOne
     private Volume volume;
 
-
-
     public Sensor(long code, SensorsType type, String value, Date timestamp, Volume volume) {
         this.code = code;
         this.type = type;
@@ -61,8 +59,6 @@ public class Sensor extends Versionable{
     public void setTimestamp(@NotNull Date timestamp) {
         this.timestamp = timestamp;
     }
-
-
 
 
     public long getCode() {
