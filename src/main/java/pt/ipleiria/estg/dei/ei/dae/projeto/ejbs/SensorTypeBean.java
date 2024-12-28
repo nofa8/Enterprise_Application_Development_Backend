@@ -42,10 +42,17 @@ public class SensorTypeBean {
         return entityManager.createNamedQuery("getAllSensorTypes", SensorsType.class).getResultList();
     }
 
-    public void update(long id, String name) throws MyEntityNotFoundException {
+    public void update(long id, String name) throws MyEntityNotFoundException,MyConstraintViolationException {
         SensorsType sensorType = find(id);
-        sensorType.setName(name);
-        entityManager.merge(sensorType);
+        if (sensorType == null) {
+            throw new MyEntityNotFoundException("Sensor Type with ID '" + id + "' not found!");
+        }
+        try {
+            sensorType.setName(name);
+            entityManager.merge(sensorType);
+        }catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
     }
 
     public void delete(long id) throws MyEntityNotFoundException {

@@ -64,17 +64,21 @@ public class ProductBean {
         entityManager.remove(entityManager.find(Product.class, product));
     }
 
-    public void update(long code, String name, String brand, float price, String description, long codeProductType, long volumeCode) {
+    public void update(long code, String name, String brand, float price, String description, long codeProductType, long volumeCode) throws MyConstraintViolationException{
         Product product = entityManager.find(Product.class, code);
-        if (product == null || !entityManager.contains(product)){
+        if (product == null || !entityManager.contains(product)) {
             return;
         }
-        product.setName(name);
-        product.setBrand(brand);
-        product.setPrice(price);
-        product.setDescription(description);
-        product.setType(entityManager.find(ProductType.class,codeProductType));
-        product.setVolume(entityManager.find(Volume.class,volumeCode));
-        entityManager.merge(product);
+        try {
+            product.setName(name);
+            product.setBrand(brand);
+            product.setPrice(price);
+            product.setDescription(description);
+            product.setType(entityManager.find(ProductType.class, codeProductType));
+            product.setVolume(entityManager.find(Volume.class, volumeCode));
+            entityManager.merge(product);
+        }catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
     }
 }

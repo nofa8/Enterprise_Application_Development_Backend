@@ -3,7 +3,9 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.ejbs;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.PackageType;
+import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityNotFoundException;
 
@@ -16,15 +18,18 @@ public class PackageTypeBean {
     private EntityManager entityManager;
 
     public void create(long code, String name)
-            throws MyEntityExistsException, MyEntityNotFoundException {
+            throws MyEntityExistsException, MyConstraintViolationException {
 
         if (entityManager.find(PackageType.class, code) != null){
             throw new MyEntityExistsException("Package Type with code " + code + " already exists");
         }
 
-        var packageType = new PackageType(code, name);
-
-        entityManager.persist(packageType);
+        try{
+            var packageType = new PackageType(code, name);
+            entityManager.persist(packageType);
+        }catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
     }
 
     public List<PackageType> findAll() {
