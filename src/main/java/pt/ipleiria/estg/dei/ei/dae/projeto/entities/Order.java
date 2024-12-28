@@ -2,8 +2,8 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.OrderState;
 
 import java.util.ArrayList;
@@ -12,10 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "orders", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name"})
-}
-)
+@Table(name = "orders")
 @NamedQueries({
         @NamedQuery(
                 name = "getAllOrders",
@@ -27,10 +24,12 @@ public class Order extends Versionable {
     @Id
     private long  code;
 
-
-    //private float price;
+    @NotNull
+    @Positive
+    private float price;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private OrderState state;
 
     @NotNull
@@ -46,8 +45,9 @@ public class Order extends Versionable {
     @ManyToOne
     private Client  client;
 
-    public Order(long code, OrderState state, Date purchaseDate, Date timestamp, Client client) {
+    public Order(long code, float price, OrderState state, Date purchaseDate, Date timestamp, Client client) {
         this.code = code;
+        this.price = price;
         this.state = state;
         this.purchaseDate = purchaseDate;
         this.timestamp = timestamp;
@@ -59,7 +59,30 @@ public class Order extends Versionable {
     public Order() {
         volumes = new ArrayList<>();
     }
+    public void addVolume(Volume volume) {
+        if ( volume == null || volumes.contains(volume)  ){
+            return;
+        }
 
+        volumes.add(volume);
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice( float price) {
+        this.price = price;
+    }
+
+    public void removeVolume(Volume sensor) {
+
+        if ( sensor == null || !volumes.contains(sensor)  ){
+            return;
+        }
+
+        volumes.remove(sensor);
+    }
     public @NotNull Date getPurchaseDate() {
         return purchaseDate;
     }

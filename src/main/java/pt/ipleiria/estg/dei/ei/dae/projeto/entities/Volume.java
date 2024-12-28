@@ -3,24 +3,19 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.PackageType;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.VolumeState;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "volumes", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name"})
-}
-)
+@Table(name = "volumes")
 @NamedQueries({
         @NamedQuery(
                 name = "getAllVolumes",
-                query = "SELECT v FROM Volume v ORDER BY o.code"
+                query = "SELECT v FROM Volume v ORDER BY v.code"
         )
 }
 )
@@ -29,9 +24,12 @@ public class Volume extends Versionable {
     private long  code;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private VolumeState state;
 
+    // criar classe com sensores associados
     @NotNull
+    @ManyToOne
     private PackageType typePackage;
 
 
@@ -66,6 +64,40 @@ public class Volume extends Versionable {
         products = new ArrayList<>();
     }
 
+
+    public void addProduct(Product product) {
+        if ( product == null || products.contains(product)  ){
+            return;
+        }
+
+        products.add(product);
+    }
+
+    public void removeProduct(Product product) {
+
+        if ( product == null || !products.contains(product)  ){
+            return;
+        }
+
+        products.remove(product);
+    }
+
+    public void addSensor(Sensor sensor) {
+        if ( sensor == null || sensors.contains(sensor)  ){
+            return;
+        }
+
+        sensors.add(sensor);
+    }
+
+    public void removeSensor(Sensor sensor) {
+
+        if ( sensor == null || !sensors.contains(sensor)  ){
+            return;
+        }
+
+        sensors.remove(sensor);
+    }
 
     public @NotNull Date getTimestamp() {
         return timestamp;

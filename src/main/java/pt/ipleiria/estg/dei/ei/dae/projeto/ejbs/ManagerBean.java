@@ -14,12 +14,12 @@ public class ManagerBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(String username, String password, String name,
-                       String email) throws MyEntityExistsException {
-        if (entityManager.find(Manager.class, username) != null) {
-            throw new MyEntityExistsException("Manager  "+username+" already exists" );
+    public void create(String email, String password, String name
+                       ) throws MyEntityExistsException {
+        if (entityManager.find(Manager.class, email) != null) {
+            throw new MyEntityExistsException("Manager  "+email+" already exists" );
         }
-        var manager = new Manager(username, password, name, email);
+        var manager = new Manager(email, password, name);
 
         entityManager.persist(manager);
     }
@@ -36,22 +36,21 @@ public class ManagerBean {
         return entityManager.createNamedQuery("getAllManagers",Manager.class).getResultList();
     }
 
-    public Manager find(String username) {
-        var manager = entityManager.find(Manager.class,username);
+    public Manager find(String email) {
+        var manager = entityManager.find(Manager.class,email);
         if (manager == null) {
-            throw new RuntimeException("Manager " + username + " not found");
+            throw new RuntimeException("Manager " + email + " not found");
         }
         return manager;
     }
 
-    public void update(String username, String password, String name, String email){
-        Manager manager = entityManager.find(Manager.class, username);
+    public void update( String email, String password, String name){
+        Manager manager = entityManager.find(Manager.class, email);
         if (manager == null){
             return;
         }
         manager.setPassword(password);
         manager.setName(name);
-        manager.setEmail(email);
 
         entityManager.merge(manager);
     }

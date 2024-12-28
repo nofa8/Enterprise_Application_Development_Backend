@@ -28,14 +28,13 @@ public class ClientBean {
 
         entityManager.merge(client);
     }
-    public void create(String username, String password, String name,
-                       String email) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
-        if (entityManager.find(Client.class, username) != null) {
-            throw new MyEntityExistsException("Client  '"+username+"' already exists!");
+    public void create(String email, String password, String name) throws MyEntityExistsException, MyConstraintViolationException {
+        if (entityManager.find(Client.class, email) != null) {
+            throw new MyEntityExistsException("Client  '"+email+"' already exists!");
         }
 
         try {
-            var client = new Client(username, password, name, email);
+            var client = new Client( email, password, name);
             entityManager.persist(client);
             entityManager.flush(); // when using Hibernate, to force it to throw ConstraintViolationException, as in the JPA specification
         } catch (ConstraintViolationException e) {

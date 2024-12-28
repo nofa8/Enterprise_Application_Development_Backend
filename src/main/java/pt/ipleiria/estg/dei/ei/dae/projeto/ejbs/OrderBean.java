@@ -22,19 +22,19 @@ public class OrderBean {
     @EJB
     private ClientBean clientBean;
 
-    public void create(long code, OrderState state, Date purchaseDate, Date timestamp, long clientCode)
+    public void create(long code, float price, OrderState state, Date purchaseDate, Date timestamp, String clientEmail)
             throws MyEntityExistsException, MyEntityNotFoundException {
 
         if (entityManager.find(Order.class, code) != null){
-            throw new MyEntityNotFoundException("Order with code " + code + " not found");
+            throw new MyEntityExistsException("Order with code " + code + " already exists");
         }
 
-        Client client = entityManager.find(Client.class, clientCode);
+        Client client = entityManager.find(Client.class, clientEmail);
         if ( client == null){
-            throw new MyEntityNotFoundException("Client with code " + code + " not found");
+            throw new MyEntityNotFoundException("Client with email " + clientEmail + " not found");
         }
 
-        var order = new Order(code,  state, purchaseDate, timestamp,  client);
+        var order = new Order(code, price,  state, purchaseDate, timestamp,  client);
 
         entityManager.persist(order);
     }
@@ -55,11 +55,12 @@ public class OrderBean {
         entityManager.remove(entityManager.find(Order.class, order));
     }
 
-    public void update(long code, OrderState state, Date timestamp, String username) {
+    public void update(long code,float price, OrderState state, Date timestamp, String username) {
         Order order = entityManager.find(Order.class, code);
         if (order == null || !entityManager.contains(order)){
             return;
         }
+        order.setPrice(price);
         order.setState(state);
         order.setTimestamp(timestamp);
         order.setClient(clientBean.find(username));

@@ -1,20 +1,17 @@
 package pt.ipleiria.estg.dei.ei.dae.projeto.ejbs;
 
 
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Client;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Order;
+import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Product;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.ProductType;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Volume;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.OrderState;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.ProductType;
+import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityNotFoundException;
 
-import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -24,21 +21,31 @@ public class ProductBean {
 
     //long code, String name, String brand, ProductType type, Volume volume
 
-    public void create(long code, String name, String brand, ProductType type, long volumeCode)
-            throws MyEntityExistsException, MyEntityNotFoundException {
+    public void create(long code, String name, String brand, float price, String description, long codeProductType, long volumeCode)
+            throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
 
-        if (entityManager.find(Product.class, code) != null){
-            throw new MyEntityNotFoundException("Product with code " + code + " not found");
+        if (entityManager.find(Product.class, code) != null) {
+            throw new MyEntityExistsException("Product with code " + code + " already exists");
         }
 
         Volume volume = entityManager.find(Volume.class, volumeCode);
-        if ( volume == null){
+        if (volume == null) {
             throw new MyEntityNotFoundException("Volume with code " + code + " not found");
         }
 
-        var product = new Product(code,  name,  brand,  type,volume);
+        ProductType productType = entityManager.find(ProductType.class, codeProductType);
+        if (productType == null) {
+            throw new MyEntityNotFoundException("Product Type with code " + code + " not found");
+        }
 
-        entityManager.persist(product);
+        try {
+            var product = new Product(code, name, brand, price, description, productType, volume);
+
+            entityManager.persist(product);
+
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
     }
 
     public List<Product> findAll() {
@@ -57,14 +64,16 @@ public class ProductBean {
         entityManager.remove(entityManager.find(Product.class, product));
     }
 
-    public void update(long code, String name, String brand, ProductType type, long volumeCode) {
+    public void update(long code, String name, String brand, float price, String description, long codeProductType, long volumeCode) {
         Product product = entityManager.find(Product.class, code);
         if (product == null || !entityManager.contains(product)){
             return;
         }
         product.setName(name);
         product.setBrand(brand);
-        product.setType(type);
+        product.setPrice(price);
+        product.setDescription(description);
+        product.setType(entityManager.find(ProductType.class,codeProductType));
         product.setVolume(entityManager.find(Volume.class,volumeCode));
         entityManager.merge(product);
     }

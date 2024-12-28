@@ -3,21 +3,16 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.SensorsType;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Objects;
 
 @Entity
-@Table(name = "sensors", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name"})
-}
-)
+@Table(name = "sensors")
 @NamedQueries({
         @NamedQuery(
                 name = "getAllSensors",
-                query = "SELECT s FROM Sensor s ORDER BY s.type, s.code" // IF needed order by something else
+                query = "SELECT s FROM Sensor s ORDER BY s.code" // IF needed order by something else
         )
     }
 )
@@ -25,7 +20,8 @@ public class Sensor extends Versionable{
 
     @Id
     private long  code;
-    @NotNull
+
+    @ManyToOne
     private SensorsType type;
     @NotBlank
     private String value;
@@ -34,8 +30,8 @@ public class Sensor extends Versionable{
     private Date timestamp;
 
     @ManyToOne
-    @NotNull
     private Volume volume;
+
 
 
     public Sensor(long code, SensorsType type, String value, Date timestamp, Volume volume) {

@@ -4,15 +4,12 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.ProductType;
+import jakarta.validation.constraints.Positive;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "products", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name"})
-    }
-)
+@Table(name = "products")
 @NamedQueries({
         @NamedQuery(
                 name = "getAllProducts",
@@ -29,26 +26,49 @@ public class Product extends Versionable {
     @NotBlank
     private String brand;
 
-    //private float price;
+    @NotNull
+    @Positive
+    private float price;
 
-
+    @NotBlank
+    private String description;
 
     @NotNull
+    @ManyToOne
     private ProductType type;
 
     @ManyToOne
     @NotNull
     private Volume volume;
 
-    public Product(long code, String name, String brand, ProductType type, Volume volume) {
+    public Product(long code, String name, String brand, float price, String description, ProductType type, Volume volume) {
         this.code = code;
         this.name = name;
         this.brand = brand;
+        this.price = price;
+        this.description = description;
         this.type = type;
         this.volume = volume;
     }
 
     public Product() {
+    }
+
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public @NotBlank String getDescription() {
+        return description;
+    }
+
+    public void setDescription(@NotBlank String description) {
+        this.description = description;
     }
 
     public @NotNull ProductType getType() {

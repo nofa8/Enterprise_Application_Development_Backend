@@ -7,13 +7,13 @@ import jakarta.ws.rs.ext.Provider;
 import java.util.logging.Logger;
 
 @Provider
-public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalArgumentException> {
-    private static final Logger logger = Logger.getLogger(IllegalArgumentException.class.getCanonicalName());
+public class NotAuthorizedExceptionMapper implements ExceptionMapper<Exception> {
+    private static final Logger logger = Logger.getLogger(Exception.class.getCanonicalName());
     @Override
-    public Response toResponse(IllegalArgumentException e) {
+    public Response toResponse(Exception e) {
         String errorMsg = e.getMessage();
         logger.warning("ERROR: " + errorMsg);
-        return Response.status(Response.Status.BAD_REQUEST)
+        return Response.status(Response.Status.UNAUTHORIZED)
                 .entity(errorMsg)
                 .build();
     }

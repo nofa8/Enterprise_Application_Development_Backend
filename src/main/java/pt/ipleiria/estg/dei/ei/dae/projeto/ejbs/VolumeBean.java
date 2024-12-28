@@ -1,14 +1,11 @@
 package pt.ipleiria.estg.dei.ei.dae.projeto.ejbs;
 
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Order;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Product;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.PackageType;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Volume;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.PackageType;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.ProductType;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityNotFoundException;
@@ -23,11 +20,11 @@ public class VolumeBean {
 
 
 
-    public void create(long code, VolumeState state, PackageType typePackage, long orderCode, Date timestamp)
+    public void create(long code, VolumeState state, long typePackage, long orderCode, Date timestamp)
             throws MyEntityExistsException, MyEntityNotFoundException {
 
         if (entityManager.find(Volume.class, code) != null){
-            throw new MyEntityNotFoundException("Volume with code " + code + " not found");
+            throw new MyEntityExistsException("Volume with code " + code + " already exists");
         }
 
         Order order = entityManager.find(Order.class,orderCode);
@@ -35,7 +32,12 @@ public class VolumeBean {
             throw new MyEntityNotFoundException("Order with code " + code + " not found");
         }
 
-        var volume = new Volume(code, state,typePackage,order,timestamp );
+        PackageType packageType = entityManager.find(PackageType.class,typePackage);
+        if ( packageType == null){
+            throw new MyEntityNotFoundException("Package Type with code " + code + " not found");
+        }
+
+        var volume = new Volume(code, state, packageType,order,timestamp );
 
         entityManager.persist(volume);
     }

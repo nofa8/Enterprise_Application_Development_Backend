@@ -3,12 +3,9 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.ejbs;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Volume;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.PackageType;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.SensorsType;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.VolumeState;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.SensorsType;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityNotFoundException;
 
@@ -20,19 +17,23 @@ public class SensorBean {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void create(long code, SensorsType type, String value, Date timestamp, long volumeCode)
+    public void create(long code, long sensorTypeCode, String value, Date timestamp, long volumeCode)
             throws MyEntityExistsException, MyEntityNotFoundException {
 
         if (entityManager.find(Sensor.class, code) != null){
-            throw new MyEntityNotFoundException("Sensor with code " + code + " not found");
+            throw new MyEntityExistsException("Sensor with code " + code + " already exists");
         }
 
         Volume volume1 = entityManager.find(Volume.class,volumeCode);
         if ( volume1 == null){
             throw new MyEntityNotFoundException("Volume with code " + code + " not found");
         }
+        var sensorType = entityManager.find(SensorsType.class,sensorTypeCode);
+        if ( sensorType == null){
+            throw new MyEntityNotFoundException("SensorType with code " + code + " not found");
+        }
 
-        var sensor = new Sensor(code,type,value,timestamp,volume1 );
+        var sensor = new Sensor(code,sensorType,value,timestamp,volume1 );
 
         entityManager.persist(sensor);
     }

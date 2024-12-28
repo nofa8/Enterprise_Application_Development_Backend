@@ -14,8 +14,8 @@ import jakarta.persistence.NamedQuery;
 })
 public class Manager extends User {
 
-    public Manager(String username, String password, String name, String email) {
-        super(username, password, name, email);
+    public Manager(String email, String password, String name) {
+        super(email, password, name);
     }
 
     public Manager() {
