@@ -64,7 +64,6 @@ public class ConfigBean {
             managerBean.create("admin7@admin.com", "password7", "name7");
             managerBean.create("admin8@admin.com", "password8", "name8");
 
-
             // Existing Sensor Types
             sensorTypeBean.create(1, "Temperature Sensor");
             sensorTypeBean.create(2, "Atmospheric Pressure Sensor");
@@ -75,18 +74,15 @@ public class ConfigBean {
             sensorTypeBean.create(7, "Infrared Sensor");
             sensorTypeBean.create(8, "Ultrasonic Sensor");
 
-
             // Existing Product Types
-            productTypeBean.create(1);
-            productTypeBean.create(2);
-            productTypeBean.create(3);
-            productTypeBean.create(4);
-            productTypeBean.create(5);
-            productTypeBean.create(6);
-            productTypeBean.create(7);
-            productTypeBean.create(8);
-            productTypeBean.create(9);
-            productTypeBean.create(10);
+            for (int i = 1; i <= 10; i++) {
+                productTypeBean.create(i);
+            }
+
+            // Assign Sensors to Product Types
+            productTypeBean.addSensor(1, sensorTypeBean.find(1), 10);
+            productTypeBean.addSensor(2, sensorTypeBean.find(2), 5);
+            productTypeBean.addSensor(3, sensorTypeBean.find(3), 8);
 
             // Existing Package Types
             packageTypeBean.create(1, "Térmica");
@@ -98,6 +94,11 @@ public class ConfigBean {
             packageTypeBean.create(7, "Recipiente de Vidro");
             packageTypeBean.create(8, "Caixa de Papelão");
 
+            // Assign Sensors to Package Types
+            packageTypeBean.addSensor(1, sensorTypeBean.find(1), 10);
+            packageTypeBean.addSensor(2, sensorTypeBean.find(2), 5);
+            packageTypeBean.addSensor(3, sensorTypeBean.find(3), 8);
+
             // Existing Orders
             orderBean.create(1, 1.2f, OrderState.PROCESSED, Date.from(Instant.now()), Date.from(Instant.now()), "email@email.com");
             orderBean.create(2, 2.5f, OrderState.DELIVERED, Date.from(Instant.now()), Date.from(Instant.now()), "email1@email.com");
@@ -105,14 +106,12 @@ public class ConfigBean {
             orderBean.create(4, 4.0f, OrderState.IN_TRANSIT, Date.from(Instant.now()), Date.from(Instant.now()), "email3@email.com");
             orderBean.create(5, 5.5f, OrderState.PROCESSED, Date.from(Instant.now()), Date.from(Instant.now()), "email4@email.com");
 
-
-
             // Existing Volumes
-            volumeBean.create(1, VolumeState.PACKED, 1, 1, Date.from(Instant.now()));
-            volumeBean.create(2, VolumeState.PACKED, 2, 2, Date.from(Instant.now()));
-            volumeBean.create(3, VolumeState.SHIPPED, 3, 3, Date.from(Instant.now()));
-            volumeBean.create(4, VolumeState.DELIVERED, 4, 4, Date.from(Instant.now()));
-            volumeBean.create(5, VolumeState.IN_TRANSIT, 5, 5, Date.from(Instant.now()));
+            for (int i = 1; i <= 5; i++) {
+                volumeBean.create(i, VolumeState.PACKED, i, i, Date.from(Instant.now()));
+            }
+
+
 
             // Existing Sensors
             sensorBean.create(1, 1, "20", Date.from(Instant.now()), 1);
@@ -121,8 +120,6 @@ public class ConfigBean {
             sensorBean.create(4, 4, "50", Date.from(Instant.now()), 4);
             sensorBean.create(5, 5, "60", Date.from(Instant.now()), 5);
 
-
-
             // Existing Products
             productBean.create(111, "Primeiro", "Volkswagen", 1, "Grande PóPó", 1);
             productBean.create(112, "Segundo", "Ford", 2, "Compacto", 2);
@@ -130,10 +127,13 @@ public class ConfigBean {
             productBean.create(114, "Quarto", "Toyota", 4, "Híbrido", 4);
             productBean.create(115, "Quinto", "Honda", 5, "SUV", 5);
 
+            // Add Products to Volumes
+            volumeBean.addProductToVolume(1, 111); // Add Product with ID 111 to Volume 1
+            volumeBean.addProductToVolume(2, 112); // Add Product with ID 112 to Volume 2
+            volumeBean.addProductToVolume(3, 113); // Add Product with ID 113 to Volume 3
 
         } catch (Exception e) {
             logger.severe(e.getMessage());
         }
     }
-
 }

@@ -4,9 +4,8 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Order;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.PackageType;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Volume;
+import org.hibernate.Hibernate;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityExistsException;
@@ -77,4 +76,59 @@ public class VolumeBean {
         }
     }
 
+    public void addProductToVolume(long volumeCode, long productCode)
+            throws MyEntityNotFoundException, MyEntityExistsException {
+
+        Volume volume = entityManager.find(Volume.class, volumeCode);
+        if (volume == null) {
+            throw new MyEntityNotFoundException("Volume with code " + volumeCode + " not found.");
+        }
+
+        Product product = entityManager.find(Product.class, productCode);
+        if (product == null) {
+            throw new MyEntityNotFoundException("Product with code " + productCode + " not found.");
+        }
+
+        if (volume.getProducts().contains(product)) {
+            throw new MyEntityExistsException("Product " + productCode + " is already in Volume " + volumeCode + ".");
+        }
+
+        volume.addProduct(product);
+        product.addVolume(volume);
+        entityManager.merge(volume);
+        entityManager.merge(product);
+    }
+
+    public void removeProductFromVolume(long volumeCode, long productCode)
+            throws MyEntityNotFoundException, MyEntityExistsException {
+
+        Volume volume = entityManager.find(Volume.class, volumeCode);
+        if (volume == null) {
+            throw new MyEntityNotFoundException("Volume with code " + volumeCode + " not found.");
+        }
+
+        Product product = entityManager.find(Product.class, productCode);
+        if (product == null) {
+            throw new MyEntityNotFoundException("Product with code " + productCode + " not found.");
+        }
+
+        if (!volume.getProducts().contains(product)) {
+            throw new MyEntityExistsException("Product " + productCode + " is not in Volume " + volumeCode + ".");
+        }
+
+        // Remove Product from the Volume
+        volume.removeProduct(product);
+        product.removeVolume(volume);
+        entityManager.merge(volume);
+        entityManager.merge(product);
+    }
+
+    public Volume findWithProducts(long volumeCode) throws MyEntityNotFoundException {
+        Volume volume = entityManager.find(Volume.class, volumeCode);
+        if (volume == null) {
+            throw new MyEntityNotFoundException("Volume with code " + volumeCode + " not found.");
+        }
+        Hibernate.initialize(volume.getProducts());
+        return volume;
+    }
 }

@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 
 import jakarta.persistence.*;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.mappings.ProductSensorMapping;
 
 import java.util.ArrayList;
 import java.util.Collections;

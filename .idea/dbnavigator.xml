@@ -6,7 +6,7 @@
   </component>
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
@@ -24,7 +24,11 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/product_sensor_mapping" />
+      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/package_sensor_mapping" />
+      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/orders" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" />
@@ -32,13 +36,19 @@
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.users" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.product_types" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.orders" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.products" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.sensors" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.product_sensor_mapping" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.package_types" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.volumes" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.sensor_types" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.package_sensor_mapping" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.orders" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.products" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.packagetypes" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.product_sensor_mapping" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.product_volume" active-filter-id="EMPTY_FILTER" />
+  </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />

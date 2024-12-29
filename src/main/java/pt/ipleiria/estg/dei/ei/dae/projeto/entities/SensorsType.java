@@ -3,6 +3,8 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.mappings.PackageSensorMapping;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.mappings.ProductSensorMapping;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,8 +29,8 @@ public class SensorsType {
     @OneToMany( mappedBy = "type")
     private List<Sensor> sensors;
 
-    @ManyToMany(mappedBy = "sensors")
-    private List<PackageType> packages;
+    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PackageSensorMapping> packages;
 
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductSensorMapping> products;
@@ -63,18 +65,7 @@ public class SensorsType {
         sensors.remove(sensor);
     }
 
-    public void addPackage(PackageType packageType) {
-        if ( packageType == null || packages.contains(packageType)  ){
-            return;
-        }
-        packages.add(packageType);
-    }
-    public void removePackage(PackageType packageType) {
-        if ( packageType == null || !packages.contains(packageType)  ){
-            return;
-        }
-        packages.remove(packageType);
-    }
+
 
     public List<Sensor> getSensors() {
         return new ArrayList<>(sensors);
@@ -147,6 +138,60 @@ public class SensorsType {
 
         // Remove the mapping
         products.remove(mapping);
+    }
+
+
+    public List<PackageSensorMapping> getPackages() {
+        // Return an unmodifiable list to prevent external modifications
+        return Collections.unmodifiableList(packages);
+    }
+
+    public void addPackage(PackageType packageType, int quantity) {
+        if (packageType == null) {
+            return;
+        }
+
+        // Check if the package is already associated with this sensor
+        boolean exists = packages.stream()
+                .anyMatch(mapping -> mapping.getPackageType().equals(packageType));
+
+        if (exists) {
+            return;
+        }
+
+        // Add new mapping
+        PackageSensorMapping mapping = new PackageSensorMapping(packageType, this, quantity);
+        packages.add(mapping);
+    }
+
+    public void updatePackageQuantity(PackageType packageType, int quantity) {
+        if (packageType == null) {
+            throw new IllegalArgumentException("Package cannot be null");
+        }
+
+        // Find the mapping for the specified package
+        PackageSensorMapping mapping = packages.stream()
+                .filter(m -> m.getPackageType().equals(packageType))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Package is not associated with this sensor."));
+
+        // Update the quantity
+        mapping.setQuantity(quantity);
+    }
+
+    public void removePackage(PackageType packageType) {
+        if (packageType == null) {
+            return;
+        }
+
+        // Find the mapping for the specified package
+        PackageSensorMapping mapping = packages.stream()
+                .filter(m -> m.getPackageType().equals(packageType))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Package is not associated with this sensor."));
+
+        // Remove the mapping
+        packages.remove(mapping);
     }
 
 }

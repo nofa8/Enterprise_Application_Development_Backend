@@ -43,7 +43,7 @@ public class SensorTypeBean {
     }
 
     public void update(long id, String name) throws MyEntityNotFoundException,MyConstraintViolationException {
-        SensorsType sensorType = find(id);
+        SensorsType sensorType = entityManager.find(SensorsType.class, id);
         if (sensorType == null) {
             throw new MyEntityNotFoundException("Sensor Type with ID '" + id + "' not found!");
         }

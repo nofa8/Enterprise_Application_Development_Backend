@@ -54,11 +54,11 @@ public class Product extends Versionable {
         this.price = price;
         this.description = description;
         this.type = type;
-        this.volumes = new ArrayList<>();
+        volumes = new ArrayList<>();
     }
 
     public Product() {
-        this.volumes = new ArrayList<>();
+        volumes = new ArrayList<>();
     }
 
 
@@ -90,8 +90,6 @@ public class Product extends Versionable {
         return new ArrayList<>(volumes);
     }
 
-
-
     public long getCode() {
         return code;
     }
@@ -122,13 +120,16 @@ public class Product extends Versionable {
         }
         volumes.add(volume);
     }
-    public void removeVolune(Volume volume) {
+    public void removeVolume(Volume volume) {
         if ( volume == null || !volumes.contains(volume)  ){
             return;
         }
         volumes.remove(volume);
     }
 
+    public List<Volume> getVolumes() {
+        return new ArrayList<>(volumes);
+    }
 
     @Override
     public int hashCode() {

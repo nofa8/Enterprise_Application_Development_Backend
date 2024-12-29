@@ -2,12 +2,15 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.mappings.PackageSensorMapping;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.mappings.ProductSensorMapping;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
-@Table(name = "packagetypes")
+@Table(name = "package_types")
 @NamedQueries({
         @NamedQuery(
                 name = "getAllPackageTypes",
@@ -23,13 +26,8 @@ public class PackageType extends Versionable {
     @NotBlank
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "package_sensor_mapping",
-            joinColumns = @JoinColumn(name = "package_id"),
-            inverseJoinColumns = @JoinColumn(name = "sensor_id")
-    )
-    private List<SensorsType> sensors;
+    @OneToMany(mappedBy = "packageType", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PackageSensorMapping> sensors;
 
 
     @OneToMany(mappedBy = "typePackage")
@@ -73,20 +71,7 @@ public class PackageType extends Versionable {
         this.name = name;
     }
 
-    public void addSensorsType(SensorsType sensor) {
-        if ( sensor == null || sensors.contains(sensor)  ){
-            return;
-        }
 
-        sensors.add(sensor);
-    }
-
-    public void removeSensorsType(SensorsType sensor) {
-        if ( sensor == null || !sensors.contains(sensor)  ){
-            return;
-        }
-        sensors.remove(sensor);
-    }
 
     public long getCode() {
         return code;
@@ -96,9 +81,48 @@ public class PackageType extends Versionable {
         this.code = code;
     }
 
-    public List<SensorsType> getSensors() {
-        return new ArrayList<>(sensors);
+
+    public List<PackageSensorMapping> getSensors() {
+        // Return an unmodifiable list of SensorsType extracted from the ProductSensorMapping
+        return Collections.unmodifiableList(sensors);
+    }
+    public void addSensor(SensorsType sensor, int quantity) {
+        if (sensor == null) {
+            throw new IllegalArgumentException("Sensor cannot be null");
+        }
+
+        boolean exists = sensors.stream()
+                .anyMatch(mapping -> mapping.getSensor().equals(sensor));
+        if (exists) {
+            throw new IllegalStateException("Sensor is already associated with this package.");
+        }
+
+        PackageSensorMapping mapping = new PackageSensorMapping(this, sensor, quantity);
+        sensors.add(mapping);
     }
 
+    public void updateSensorQuantity(SensorsType sensor, int quantity) {
+        if (sensor == null) {
+            throw new IllegalArgumentException("Sensor cannot be null");
+        }
+
+        PackageSensorMapping mapping = sensors.stream()
+                .filter(m -> m.getSensor().equals(sensor))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Sensor is not associated with this package."));
+        mapping.setQuantity(quantity);
+    }
+
+    public void removeSensor(SensorsType sensor) {
+        if (sensor == null) {
+            return;
+        }
+
+        PackageSensorMapping mapping = sensors.stream()
+                .filter(m -> m.getSensor().equals(sensor))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Sensor is not associated with this package."));
+        sensors.remove(mapping);
+    }
 
 }

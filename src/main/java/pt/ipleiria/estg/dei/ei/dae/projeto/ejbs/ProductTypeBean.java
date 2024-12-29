@@ -3,12 +3,13 @@ package pt.ipleiria.estg.dei.ei.dae.projeto.ejbs;
 
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 
 import jakarta.validation.ConstraintViolationException;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Product;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.ProductType;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Volume;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.SensorsType;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.mappings.ProductSensorMapping;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyEntityNotFoundException;
@@ -47,23 +48,64 @@ public class ProductTypeBean {
         return productType;
     }
 
-    public void delete(long product) {
-        entityManager.remove(entityManager.find(ProductType.class, product));
+    public void delete(long productCode)  throws MyConstraintViolationException, MyEntityNotFoundException{
+        try{
+            ProductType product = entityManager.find(ProductType.class, productCode);
+            if (product == null) {
+                throw new MyEntityNotFoundException("Product Type with code " + productCode + " not found.");
+            }
+
+            entityManager.remove(product);
+        }catch (ConstraintViolationException e){
+            throw new MyConstraintViolationException(e);
+        }
     }
 
-    public void update(long code, String name, String brand, ProductType type, long volumeCode) throws MyConstraintViolationException {
-        Product product = entityManager.find(Product.class, code);
+    public void update(long code) throws MyConstraintViolationException {
+        ProductType product = entityManager.find(ProductType.class, code);
         if (product == null || !entityManager.contains(product)) {
             return;
         }
         try {
-            product.setName(name);
-            product.setBrand(brand);
-            product.setType(type);
-            product.setVolume(entityManager.find(Volume.class, volumeCode));
+            product.setCode(code);
             entityManager.merge(product);
         }catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
+    }
+
+    public void addSensor(long productCode, SensorsType sensor, int quantity)
+            throws MyEntityNotFoundException, MyConstraintViolationException {
+
+        ProductType product = entityManager.find(ProductType.class, productCode);
+        if (product == null) {
+            throw new MyEntityNotFoundException("Product Type with code " + productCode + " not found.");
+        }
+
+        try {
+            product.addSensor(sensor, quantity);
+            entityManager.merge(product);
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
+    }
+
+    // Remove a sensor from a ProductType
+    public void removeSensor(long productCode, SensorsType sensor) throws MyEntityNotFoundException {
+        ProductType product = entityManager.find(ProductType.class, productCode);
+        if (product == null) {
+            throw new MyEntityNotFoundException("Product Type with code " + productCode + " not found.");
+        }
+
+        product.removeSensor(sensor);
+        entityManager.merge(product);
+    }
+
+    public List<ProductSensorMapping> findSensorsForProduct(long productCode) throws MyEntityNotFoundException {
+        ProductType product = entityManager.find(ProductType.class, productCode);
+        if (product == null) {
+            throw new MyEntityNotFoundException("Product Type with code " + productCode + " not found.");
+        }
+        return product.getSensors();
     }
 }

@@ -14,7 +14,6 @@ import java.util.List;
         )
 })
 public class Client extends  User {
-
     @OneToMany(mappedBy = "client")
     private List<Order> orders;
 
@@ -32,16 +31,13 @@ public class Client extends  User {
         if ( order == null || orders.contains(order)  ){
             return;
         }
-
         orders.add(order);
     }
 
     public void removeOrder(Order order) {
-
         if ( order == null || !orders.contains(order)  ){
             return;
         }
-
         orders.remove(order);
     }
 

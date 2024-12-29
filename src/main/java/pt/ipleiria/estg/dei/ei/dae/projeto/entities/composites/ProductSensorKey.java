@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.ei.dae.projeto.entities.composite;
+package pt.ipleiria.estg.dei.ei.dae.projeto.entities.composites;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

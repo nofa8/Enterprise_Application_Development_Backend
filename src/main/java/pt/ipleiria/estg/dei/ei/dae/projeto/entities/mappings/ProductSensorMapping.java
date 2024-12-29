@@ -1,8 +1,10 @@
-package pt.ipleiria.estg.dei.ei.dae.projeto.entities;
+package pt.ipleiria.estg.dei.ei.dae.projeto.entities.mappings;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import pt.ipleiria.estg.dei.ei.dae.projeto.entities.composite.ProductSensorKey;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.ProductType;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.SensorsType;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.composites.ProductSensorKey;
 
 import java.util.Objects;
 
