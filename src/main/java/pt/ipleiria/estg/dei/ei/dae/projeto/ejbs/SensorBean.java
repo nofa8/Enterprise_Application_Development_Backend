@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Sensor;
+import pt.ipleiria.estg.dei.ei.dae.projeto.entities.SensorValueHistory;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.Volume;
 import pt.ipleiria.estg.dei.ei.dae.projeto.entities.SensorsType;
 import pt.ipleiria.estg.dei.ei.dae.projeto.exceptions.MyConstraintViolationException;
@@ -71,9 +72,37 @@ public class SensorBean {
             sensor.setVolume(entityManager.find(Volume.class, volumeCode));
             sensor.setTimestamp(timestamp);
             entityManager.merge(sensor);
+            updateSensorValue(code, value);
         }catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
+    }
+
+    public void updateSensorValue(long sensorCode, String newValue) {
+        Sensor sensor = entityManager.find(Sensor.class, sensorCode);
+        if (sensor == null) {
+            throw new RuntimeException("Sensor with code " + sensorCode + " not found");
+        }
+
+        if (!sensor.getValue().equals(newValue)) {
+            SensorValueHistory history = new SensorValueHistory(
+                    sensor,
+                    sensor.getValue(),
+                    sensor.getTimestamp()
+            );
+            entityManager.persist(history);
+
+            sensor.setValue(newValue);
+            sensor.setTimestamp(new Date());
+            entityManager.merge(sensor);
+        }
+    }
+
+    public List<SensorValueHistory> getSensorHistory(long sensorCode) {
+        return entityManager
+                .createNamedQuery("getSensorHistory", SensorValueHistory.class)
+                .setParameter("sensorCode", sensorCode)
+                .getResultList();
     }
 
 }

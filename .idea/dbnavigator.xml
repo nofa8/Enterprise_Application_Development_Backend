@@ -27,7 +27,6 @@
     <open-files>
       <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/product_sensor_mapping" />
       <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/package_sensor_mapping" />
-      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/orders" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">

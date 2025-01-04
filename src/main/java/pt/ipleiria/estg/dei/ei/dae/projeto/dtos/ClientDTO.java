@@ -32,8 +32,6 @@ public class ClientDTO implements Serializable {
     }
 
 
-
-
     public List<Order> getOrders() {
         return  new ArrayList<>(orders);
     }
