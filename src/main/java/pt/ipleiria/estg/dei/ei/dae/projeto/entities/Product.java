@@ -141,4 +141,7 @@ public class Product extends Versionable {
         return this.getCode() == ((Product)obj).getCode();
     }
 
+    public int getAmount() {
+        return 0;
+    }
 }
