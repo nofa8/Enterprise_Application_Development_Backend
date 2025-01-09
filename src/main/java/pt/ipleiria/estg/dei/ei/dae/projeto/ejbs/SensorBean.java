@@ -40,6 +40,7 @@ public class SensorBean {
             var sensor = new Sensor(code, sensorType, value, timestamp, volume1);
 
             entityManager.persist(sensor);
+            updateSensorValue(sensor);
         }catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
@@ -72,30 +73,19 @@ public class SensorBean {
             sensor.setVolume(entityManager.find(Volume.class, volumeCode));
             sensor.setTimestamp(timestamp);
             entityManager.merge(sensor);
-            updateSensorValue(code, value);
+            updateSensorValue(sensor);
         }catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
     }
 
-    public void updateSensorValue(long sensorCode, String newValue) {
-        Sensor sensor = entityManager.find(Sensor.class, sensorCode);
-        if (sensor == null) {
-            throw new RuntimeException("Sensor with code " + sensorCode + " not found");
-        }
-
-        if (!sensor.getValue().equals(newValue)) {
-            SensorValueHistory history = new SensorValueHistory(
-                    sensor,
-                    sensor.getValue(),
-                    sensor.getTimestamp()
-            );
-            entityManager.persist(history);
-
-            sensor.setValue(newValue);
-            sensor.setTimestamp(new Date());
-            entityManager.merge(sensor);
-        }
+    public void updateSensorValue(Sensor sensor) {
+        SensorValueHistory history = new SensorValueHistory(
+                sensor,
+                sensor.getValue(),
+                sensor.getTimestamp()
+        );
+        entityManager.persist(history);
     }
 
     public List<SensorValueHistory> getSensorHistory(long sensorCode) {

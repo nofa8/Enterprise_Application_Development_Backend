@@ -1,0 +1,3 @@
+### Get Student
+GET http://localhost:8080/project/api/clients/
+Accept: application/json

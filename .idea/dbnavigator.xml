@@ -25,8 +25,12 @@
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
-      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/product_sensor_mapping" />
-      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/package_sensor_mapping" />
+      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/sensor_types" />
+      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/products" />
+      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/sensors" />
+      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/product_volume" />
+      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/sensor_value_history" />
+      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/product_types" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
@@ -41,6 +45,7 @@
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.product_sensor_mapping" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.package_types" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.volumes" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.sensor_value_history" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.sensor_types" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.package_sensor_mapping" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.packagetypes" active-filter-id="EMPTY_FILTER" />

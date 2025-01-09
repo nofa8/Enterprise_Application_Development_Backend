@@ -133,7 +133,7 @@ public class ConfigBean {
             volumeBean.addProductToVolume(3, 113); // Add Product with ID 113 to Volume 3
 
         } catch (Exception e) {
-            logger.severe(e.getMessage());
+            logger.severe("Config Bean: "+e.getMessage());
         }
     }
 }
