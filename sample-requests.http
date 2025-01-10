@@ -3,5 +3,22 @@ POST http://localhost:8080/project/api/auth/login
 Content-Type: application/json
 Accept: application/json
 
-{ "email": "email@email.com", "password": "email@email.com" }
+{ "email": "email@email.com", "password": "password" }
 
+
+### REQUEST JWT TOKEN
+POST http://localhost:8080/project/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{ "email": "admin1@admin.com", "password": "password1" }
+
+
+### GET CLIENTS
+GET http://localhost:8080/project/api/clients
+Content-Type: application/json
+
+### GET Orders - Manager or client depends on the role od the user that you get the token
+GET http://localhost:8080/project/api/orders
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2NTI3MjUwLCJleHAiOjE3MzY1MzA4NTB9.CGH810XIoBzR1Vz1n6gpAFtBY_rTZWwnQJoKoof9ijMgiSKTBIvnBJ9zGJI9hlIn
