@@ -24,14 +24,7 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/sensor_types" />
-      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/products" />
-      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/sensors" />
-      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/product_volume" />
-      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/sensor_value_history" />
-      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/product_types" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" />

@@ -2,10 +2,8 @@ package pt.ipleiria.estg.dei.ei.dae.project.ws;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -15,15 +13,22 @@ import pt.ipleiria.estg.dei.ei.dae.project.dtos.*;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.ClientBean;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.OrderBean;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.UserBean;
+import pt.ipleiria.estg.dei.ei.dae.project.ejbs.VolumeBean;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.User;
+import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
 import pt.ipleiria.estg.dei.ei.dae.project.security.Authenticated;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 @Path("orders") // relative url web path for this service
-@Authenticated
+//@Authenticated
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
 @Consumes({MediaType.APPLICATION_JSON}) // injects header “Accept: application/json”
 public class OrderService {
@@ -34,11 +39,18 @@ public class OrderService {
 
     @EJB
     private OrderBean orderBean;
+
+    @EJB
+    private VolumeBean volumeBean;
+
     @Context
     private SecurityContext securityContext;
 
+
+
     @GET
     @Path("/") // means: the relative URL path is "/orders/"
+    @Authenticated
     public Response getAllOrdersBasedOnRole() {
         // Get the current authenticated user
         String username = securityContext.getUserPrincipal().getName();
@@ -58,4 +70,58 @@ public class OrderService {
             return Response.status(Response.Status.FORBIDDEN).entity("Access Denied").build();
         }
     }
+
+    @POST
+    @Path("/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Authenticated
+    public Response createNewOrder (OrderDTO orderDTO) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
+        orderBean.create(
+                orderDTO.getCode(),
+                orderDTO.getPrice(),
+                orderDTO.getState(),
+                orderDTO.getPurchaseDate(),
+                Date.from(Instant.now()),
+                orderDTO.getClientId()
+        );
+
+        Order newOrder = orderBean.find(orderDTO.getCode());
+
+
+        return Response.status(Response.Status.CREATED)
+                .entity(OrderDTO.from(newOrder))
+                .build();
+    }
+
+
+
+    @POST
+    @Path("/{id:code_order}/volumes")
+    public Response createVolumes(@PathParam("id:code_order") Long orderId, List<VolumeDTO> volumeDTOs)
+            throws MyEntityNotFoundException, MyConstraintViolationException, MyEntityExistsException {
+        volumeBean.createVolumes(orderId, volumeDTOs);
+        return Response.status(Response.Status.CREATED).build();
+    }
+
+//    @PATCH
+//    @Path("/{id:code_order}/volumes/{id:code_volume}")
+//    public Response updateVolume(@PathParam("id:code_order") Long orderId,
+//                                 @PathParam("id:code_volume") Long volumeId,
+//                                 VolumeUpdateDTO updateDTO)
+//            throws MyEntityNotFoundException, MyConstraintViolationException {
+//        volumeBean.updateVolume(orderId, volumeId, updateDTO);
+//        return Response.ok().build();
+//    }
+//
+    @GET
+    @Path("/{id:code_order}/volumes/{id:code_volume}")
+    public Response getVolumeDetails(@PathParam("id:code_order") Long orderId,
+                                     @PathParam("id:code_volume") Long volumeId)
+            throws MyEntityNotFoundException {
+        return Response.ok("wow").build();
+
+    }
+
+
+
 }

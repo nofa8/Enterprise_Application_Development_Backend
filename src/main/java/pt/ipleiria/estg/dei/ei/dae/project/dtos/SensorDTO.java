@@ -2,6 +2,8 @@ package pt.ipleiria.estg.dei.ei.dae.project.dtos;
 
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Sensor;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,11 +12,11 @@ public class SensorDTO {
     private long code;
     private long sensorTypeCode;
     private String value;
-    private String lastUpdate;
+    private Date lastUpdate;
     private List<SensorLogDTO> log;
 
     // Constructor
-    public SensorDTO(long code, long sensorTypeCode, String value, String lastUpdate) {
+    public SensorDTO(long code, long sensorTypeCode, String value, Date lastUpdate) {
         this.code = code;
         this.sensorTypeCode = sensorTypeCode;
         this.value = value;
@@ -51,11 +53,11 @@ public class SensorDTO {
         this.value = value;
     }
 
-    public String getLastUpdate() {
+    public Date getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(String lastUpdate) {
+    public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
@@ -70,7 +72,7 @@ public class SensorDTO {
     // Static method to convert Sensor entity to DTO
     public static SensorDTO from(Sensor sensor) {
         // Convert timestamp to String if needed, using some date format
-        String lastUpdate = sensor.getTimestamp() != null ? sensor.getTimestamp().toString() : null;
+        Date lastUpdate = sensor.getTimestamp() != null ? sensor.getTimestamp() : null;
 
         // Create the DTO with the necessary information from the Sensor entity
         return new SensorDTO(

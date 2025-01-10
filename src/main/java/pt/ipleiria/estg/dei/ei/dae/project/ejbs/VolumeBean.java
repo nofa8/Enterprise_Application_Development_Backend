@@ -5,12 +5,15 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import org.hibernate.Hibernate;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.SensorDTO;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.VolumeDTO;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -131,4 +134,54 @@ public class VolumeBean {
         Hibernate.initialize(volume.getProducts());
         return volume;
     }
+
+    public void createVolumes(long orderId, List<VolumeDTO> volumeDTOs)
+            throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
+
+        // Find the associated order
+        Date timestamp = Date.from(Instant.now());
+        Order order = entityManager.find(Order.class, orderId);
+        if (order == null) {
+            throw new MyEntityNotFoundException("Order with code " + orderId + " not found");
+        }
+
+        for (VolumeDTO volumeDTO : volumeDTOs) {
+            // Check if the volume already exists
+            if (entityManager.find(Volume.class, volumeDTO.getCode()) != null) {
+                throw new MyEntityExistsException("Volume with code " + volumeDTO.getCode() + " already exists");
+            }
+
+            // Find the associated package type
+            PackageType packageType = entityManager.find(PackageType.class, volumeDTO.getPackageType());
+            if (packageType == null) {
+                throw new MyEntityNotFoundException("Package Type with code " + volumeDTO.getPackageType() + " not found");
+            }
+
+            try {
+                // Create and persist the volume
+                Volume volume = new Volume(
+                        volumeDTO.getCode(),
+                        volumeDTO.getState(),
+                        packageType,
+                        order,
+                        timestamp
+                );
+
+                entityManager.persist(volume);
+
+                for (SensorDTO sensor : volumeDTO.getSensors()){
+                    SensorsType sensorsType = entityManager.find(SensorsType.class,sensor.getSensorTypeCode());
+                    if (sensorsType == null) {
+                        throw new MyEntityNotFoundException("Sensors Type with code " + sensor.getSensorTypeCode() + " not found");
+                    }
+                    Sensor sensor1 = new Sensor(sensor.getCode(),sensorsType,sensor.getValue(),sensor.getLastUpdate(),volume);
+                    entityManager.persist(sensor1);
+                }
+
+            } catch (ConstraintViolationException e) {
+                throw new MyConstraintViolationException(e);
+            }
+        }
+    }
+
 }

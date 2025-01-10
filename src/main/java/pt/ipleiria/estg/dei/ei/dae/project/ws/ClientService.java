@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.dae.project.ws;
 
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -10,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import pt.ipleiria.estg.dei.ei.dae.project.dtos.ClientDTO;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.ClientBean;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.OrderBean;
+import pt.ipleiria.estg.dei.ei.dae.project.security.Authenticated;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ public class ClientService {
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/") // means: the relative url path is “/api/clients/”
+    @Authenticated
+    @RolesAllowed({"manager"})
     public List<ClientDTO> getAllClients() {
         return ClientDTO.from(clientBean.findAll());
     }

@@ -3,7 +3,7 @@
 ifneq (,$(wildcard ./.env))
     include .env
     export
-    APPLICATION_NAME ?= project
+    APPLICATION_NAME ?= monitor
 endif
 
 up:
