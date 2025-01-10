@@ -21,6 +21,17 @@ public class PostOrderRequestDTO implements Serializable {
     @NotNull
     private String purchaseDate;
 
+    public PostOrderRequestDTO(int code, String price, int clientCode, String state, String purchaseDate) {
+        this.code = code;
+        this.price = price;
+        this.clientCode = clientCode;
+        this.state = state;
+        this.purchaseDate = purchaseDate;
+    }
+
+    public PostOrderRequestDTO() {
+    }
+
     // Getters and Setters
     public int getCode() {
         return code;

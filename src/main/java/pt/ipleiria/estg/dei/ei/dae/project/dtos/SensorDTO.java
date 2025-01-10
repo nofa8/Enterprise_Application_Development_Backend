@@ -8,18 +8,22 @@ import java.util.stream.Collectors;
 public class SensorDTO {
 
     private long code;
-    private long sensorTypeCode;  // Assuming you want to use the type code
-    private String value;  // Latest value
-    private String lastUpdate;  // Representing the timestamp
-    private List<SensorLogDTO> log;  // For history endpoints (optional)
+    private long sensorTypeCode;
+    private String value;
+    private String lastUpdate;
+    private List<SensorLogDTO> log;
 
     // Constructor
-    public SensorDTO(long code, long sensorTypeCode, String value, String lastUpdate, List<SensorLogDTO> log) {
+    public SensorDTO(long code, long sensorTypeCode, String value, String lastUpdate) {
         this.code = code;
         this.sensorTypeCode = sensorTypeCode;
         this.value = value;
         this.lastUpdate = lastUpdate;
-        this.log = log;
+        this.log = new ArrayList<>();
+    }
+
+    public SensorDTO() {
+        this.log = new ArrayList<>();
     }
 
     // Getters and Setters
@@ -56,7 +60,7 @@ public class SensorDTO {
     }
 
     public List<SensorLogDTO> getLog() {
-        return log;
+        return new ArrayList<>( log);
     }
 
     public void setLog(List<SensorLogDTO> log) {
@@ -73,9 +77,7 @@ public class SensorDTO {
                 sensor.getCode(),
                 sensor.getType() != null ? sensor.getType().getId() : null,  // Assuming SensorsType has a 'getCode' method
                 sensor.getValue(),
-                lastUpdate,
-                null // Here you can convert the log if needed
-        );
+                lastUpdate);
     }
 
     // Optionally, you could implement a method to convert a list of SensorValueHistory entities into a list of DTOs
