@@ -13,15 +13,15 @@ public class VolumeDTO implements Serializable {
 
     private long code;
     private VolumeState state;
-    private PackageType packageType;
+    private long packageTypeCode;
     private Date lastUpdate;
     private List<SensorDTO> sensors;
     private List<ProductDTO> products;
 
-    public VolumeDTO(long code, VolumeState state, PackageType packageType, Date lastUpdate) {
+    public VolumeDTO(long code, VolumeState state, long packageType, Date lastUpdate) {
         this.code = code;
         this.state = state;
-        this.packageType = packageType;
+        this.packageTypeCode = packageType;
         this.lastUpdate = lastUpdate;
         this.sensors = new ArrayList<>();
         this.products = new ArrayList<>();
@@ -48,12 +48,12 @@ public class VolumeDTO implements Serializable {
         this.state = state;
     }
 
-    public PackageType getPackageType() {
-        return packageType;
-    }
 
-    public void setPackageType(PackageType packageType) {
-        this.packageType = packageType;
+    public long getPackageTypeCode(){
+        return packageTypeCode;
+    }
+    public void setPackageTypeCode(long packageType) {
+        this.packageTypeCode = packageType;
     }
 
     public Date getLastUpdate() {
@@ -84,7 +84,7 @@ public class VolumeDTO implements Serializable {
         VolumeDTO dto = new VolumeDTO(
                 volume.getCode(),
                 volume.getState(),
-                volume.getTypePackage(),
+                volume.getTypePackage().getCode(),
                 volume.getTimestamp()
         );
         dto.setSensors(SensorDTO.from(volume.getSensors()));

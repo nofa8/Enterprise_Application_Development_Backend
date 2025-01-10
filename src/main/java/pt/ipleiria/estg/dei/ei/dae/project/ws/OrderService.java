@@ -40,8 +40,6 @@ public class OrderService {
     @EJB
     private OrderBean orderBean;
 
-    @EJB
-    private VolumeBean volumeBean;
 
     @Context
     private SecurityContext securityContext;
@@ -74,7 +72,6 @@ public class OrderService {
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Authenticated
     public Response createNewOrder (OrderDTO orderDTO) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
         orderBean.create(
                 orderDTO.getCode(),
@@ -92,36 +89,5 @@ public class OrderService {
                 .entity(OrderDTO.from(newOrder))
                 .build();
     }
-
-
-
-    @POST
-    @Path("/{id:code_order}/volumes")
-    public Response createVolumes(@PathParam("id:code_order") Long orderId, List<VolumeDTO> volumeDTOs)
-            throws MyEntityNotFoundException, MyConstraintViolationException, MyEntityExistsException {
-        volumeBean.createVolumes(orderId, volumeDTOs);
-        return Response.status(Response.Status.CREATED).build();
-    }
-
-//    @PATCH
-//    @Path("/{id:code_order}/volumes/{id:code_volume}")
-//    public Response updateVolume(@PathParam("id:code_order") Long orderId,
-//                                 @PathParam("id:code_volume") Long volumeId,
-//                                 VolumeUpdateDTO updateDTO)
-//            throws MyEntityNotFoundException, MyConstraintViolationException {
-//        volumeBean.updateVolume(orderId, volumeId, updateDTO);
-//        return Response.ok().build();
-//    }
-//
-    @GET
-    @Path("/{id:code_order}/volumes/{id:code_volume}")
-    public Response getVolumeDetails(@PathParam("id:code_order") Long orderId,
-                                     @PathParam("id:code_volume") Long volumeId)
-            throws MyEntityNotFoundException {
-        return Response.ok("wow").build();
-
-    }
-
-
 
 }

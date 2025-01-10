@@ -152,9 +152,9 @@ public class VolumeBean {
             }
 
             // Find the associated package type
-            PackageType packageType = entityManager.find(PackageType.class, volumeDTO.getPackageType());
+            PackageType packageType = entityManager.find(PackageType.class, volumeDTO.getPackageTypeCode());
             if (packageType == null) {
-                throw new MyEntityNotFoundException("Package Type with code " + volumeDTO.getPackageType() + " not found");
+                throw new MyEntityNotFoundException("Package Type with code " + volumeDTO.getPackageTypeCode() + " not found");
             }
 
             try {
@@ -177,7 +177,6 @@ public class VolumeBean {
                     Sensor sensor1 = new Sensor(sensor.getCode(),sensorsType,sensor.getValue(),sensor.getLastUpdate(),volume);
                     entityManager.persist(sensor1);
                 }
-
             } catch (ConstraintViolationException e) {
                 throw new MyConstraintViolationException(e);
             }
