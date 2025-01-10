@@ -55,6 +55,14 @@ public class OrderBean {
         return order;
     }
 
+    public List<Order> findByClientEmail(String clientEmail) {
+        return entityManager.createQuery(
+                "SELECT o FROM Order o WHERE o.client.email = :email ORDER BY o.code", Order.class)
+                .setParameter("email", clientEmail)
+                .getResultList();
+    }
+
+
     public void delete(long order) {
         entityManager.remove(entityManager.find(Order.class, order));
     }

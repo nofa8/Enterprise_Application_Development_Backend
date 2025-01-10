@@ -43,7 +43,7 @@ public class Order extends Versionable {
     private List<Volume> volumes;
 
     @ManyToOne
-    private Client  client;
+    private Client client;
 
     public Order(long code, float price, OrderState state, Date purchaseDate, Date timestamp, Client client) {
         this.code = code;
