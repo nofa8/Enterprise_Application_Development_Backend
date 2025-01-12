@@ -13,13 +13,13 @@ public class OrderDTO implements Serializable {
 
     private long code;
     private float price;
-    private String clientId;
+    private long clientId;
     private OrderState state;
     private Date purchaseDate;
     private Date lastUpdate;
     private List<VolumeDTO> volumes;
 
-    public OrderDTO(long code, float price, String clientCode, OrderState state, Date purchaseDate, Date lastUpdate) {
+    public OrderDTO(long code, float price, long clientCode, OrderState state, Date purchaseDate, Date lastUpdate) {
         this.code = code;
         this.price = price;
         this.clientId = clientCode;
@@ -49,11 +49,11 @@ public class OrderDTO implements Serializable {
         this.price = price;
     }
 
-    public String getClientId() {
+    public long getClientId() {
         return clientId;
     }
 
-    public void setClientId(String clientId) {
+    public void setClientId(long clientId) {
         this.clientId = clientId;
     }
 

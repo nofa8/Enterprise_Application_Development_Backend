@@ -108,11 +108,11 @@ public class ConfigBean {
             packageTypeBean.addSensor(3, sensorTypeBean.find(3), 8);
 
             // Existing Orders
-            orderBean.create(1, 1.2f, OrderState.PROCESSED, Date.from(Instant.now()), Date.from(Instant.now()), "email@email.com");
-            orderBean.create(2, 2.5f, OrderState.DELIVERED, Date.from(Instant.now()), Date.from(Instant.now()), "email1@email.com");
-            orderBean.create(3, 3.0f, OrderState.SHIPPED, Date.from(Instant.now()), Date.from(Instant.now()), "email2@email.com");
-            orderBean.create(4, 4.0f, OrderState.IN_TRANSIT, Date.from(Instant.now()), Date.from(Instant.now()), "email3@email.com");
-            orderBean.create(5, 5.5f, OrderState.PROCESSED, Date.from(Instant.now()), Date.from(Instant.now()), "email4@email.com");
+            orderBean.create(1, 1.2f, OrderState.PROCESSED, Date.from(Instant.now()), Date.from(Instant.now()), 1);
+            orderBean.create(2, 2.5f, OrderState.DELIVERED, Date.from(Instant.now()), Date.from(Instant.now()), 2);
+            orderBean.create(3, 3.0f, OrderState.SHIPPED, Date.from(Instant.now()), Date.from(Instant.now()), 3);
+            orderBean.create(4, 4.0f, OrderState.IN_TRANSIT, Date.from(Instant.now()), Date.from(Instant.now()), 4);
+            orderBean.create(5, 5.5f, OrderState.PROCESSED, Date.from(Instant.now()), Date.from(Instant.now()), 5);
 
             // Existing Volumes
             for (int i = 1; i <= 5; i++) {

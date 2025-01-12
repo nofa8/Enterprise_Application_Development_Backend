@@ -95,8 +95,8 @@ public class Order extends Versionable {
         return client;
     }
 
-    public String getClientId() {
-        return client.getEmail();
+    public long getClientId() {
+        return client.getId();
     }
 
     public void setClient(Client client) {

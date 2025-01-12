@@ -3,11 +3,12 @@ package pt.ipleiria.estg.dei.ei.dae.project.ejbs;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Client;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
-import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
 import pt.ipleiria.estg.dei.ei.dae.project.security.Hasher;
 
@@ -65,10 +66,13 @@ public class ClientBean {
                             "SELECT c FROM Client c WHERE c.email = :email", Client.class)
                     .setParameter("email", email)
                     .getSingleResult();
-        } catch (Exception e) { // Can handle NoResultException or others as needed
+        } catch (NoResultException e) {
             throw new MyEntityNotFoundException("Client with email " + email + " not found.");
+        } catch (PersistenceException e) {
+            throw new MyEntityNotFoundException("Database error occurred while searching for client with email " + email);
         }
     }
+
 
 
     public void delete(Long id) throws MyEntityNotFoundException {
