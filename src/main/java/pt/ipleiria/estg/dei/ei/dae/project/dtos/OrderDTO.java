@@ -86,6 +86,9 @@ public class OrderDTO implements Serializable {
     }
 
     public void setVolumes(List<VolumeDTO> volumes) {
+        if (volumes == null){
+            return;
+        }
         this.volumes = new ArrayList<>(volumes);
     }
 

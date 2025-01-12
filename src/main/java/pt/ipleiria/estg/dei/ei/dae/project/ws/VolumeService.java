@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pt.ipleiria.estg.dei.ei.dae.project.dtos.VolumeDTO;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.VolumeBean;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
@@ -32,16 +33,16 @@ public class VolumeService {
         return Response.status(Response.Status.CREATED).build();
     }
 
-    //    @PATCH
-//    @Path("/{id:code_order}/volumes/{id:code_volume}")
-//    public Response updateVolume(@PathParam("id:code_order") Long orderId,
-//                                 @PathParam("id:code_volume") Long volumeId,
-//                                 VolumeUpdateDTO updateDTO)
-//            throws MyEntityNotFoundException, MyConstraintViolationException {
-//        volumeBean.updateVolume(orderId, volumeId, updateDTO);
-//        return Response.ok().build();
-//    }
-//
+    @PATCH
+    @Path("/{id:code_order}/volumes/{id:code_volume}")
+    public Response updateVolume(@PathParam("id:code_order") Long orderId,
+                                 @PathParam("id:code_volume") Long volumeId,
+                                 VolumeState state)
+            throws MyEntityNotFoundException, MyConstraintViolationException {
+        volumeBean.patchState(volumeId,state);
+        return Response.ok().build();
+    }
+
     @GET
     @Path("/{code_volume}")
     @Authenticated

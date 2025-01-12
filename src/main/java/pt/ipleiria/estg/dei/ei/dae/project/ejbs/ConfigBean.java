@@ -38,6 +38,9 @@ public class ConfigBean {
     @EJB
     private PackageTypeBean packageTypeBean ;
 
+    @EJB
+    private LogisticBean logisticBean;
+
     @PostConstruct
     public void populateDB() {
         try {
@@ -62,6 +65,12 @@ public class ConfigBean {
             managerBean.create("admin6@admin.com", "password6", "name6");
             managerBean.create("admin7@admin.com", "password7", "name7");
             managerBean.create("admin8@admin.com", "password8", "name8");
+
+            // Existing Logistics
+            logisticBean.create("logistic1@logistic.com", "password1", "name1");
+            logisticBean.create("logistic2@logistic.com", "password2", "name2");
+            logisticBean.create("logistic3@logistic.com", "password3", "name3");
+
 
             // Existing Sensor Types
             sensorTypeBean.create(1, "Temperature Sensor");

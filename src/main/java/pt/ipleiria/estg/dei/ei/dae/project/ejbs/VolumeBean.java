@@ -183,4 +183,14 @@ public class VolumeBean {
         }
     }
 
+    public void patchState(Long volumeId, VolumeState state) throws MyEntityNotFoundException {
+        Volume volume = entityManager.find(Volume.class, volumeId);
+        if (volume == null) {
+            throw new MyEntityNotFoundException("Volume with code " + volumeId + " not found");
+        }
+
+        volume.setState(state);
+        entityManager.merge(volume);
+
+    }
 }

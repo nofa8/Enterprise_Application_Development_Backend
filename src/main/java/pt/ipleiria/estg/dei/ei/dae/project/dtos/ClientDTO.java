@@ -1,6 +1,5 @@
 package pt.ipleiria.estg.dei.ei.dae.project.dtos;
 
-import jakarta.persistence.Id;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Client;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
 
@@ -11,17 +10,17 @@ import java.util.stream.Collectors;
 
 public class ClientDTO implements Serializable {
 
-    @Id
-    private String email;
-
+    private long id; // Using id as the primary key
+    private String email; // Email remains unique, but it's not the primary key anymore
     private String password;
     private String name;
     private List<Order> orders;
 
-    public ClientDTO( String email, String password, String name) {
+    public ClientDTO(long id, String email, String password, String name) {
+        this.id = id;
+        this.email = email;
         this.password = password;
         this.name = name;
-        this.email = email;
         orders = new ArrayList<>();
     }
 
@@ -29,12 +28,21 @@ public class ClientDTO implements Serializable {
         orders = new ArrayList<>();
     }
 
-
-    public List<Order> getOrders() {
-        return  new ArrayList<>(orders);
+    public long getId() {
+        return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getPassword() {
         return password;
@@ -52,22 +60,24 @@ public class ClientDTO implements Serializable {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public List<Order> getOrders() {
+        return new ArrayList<>(orders);
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     public static ClientDTO from(Client client) {
         return new ClientDTO(
+                client.getId(),  // Use the new ID field
                 client.getEmail(),
                 client.getPassword(),
                 client.getName()
         );
     }
-    // converts an entire list of entities into a list of DTOs
+
+    // Converts an entire list of entities into a list of DTOs
     public static List<ClientDTO> from(List<Client> clients) {
         return clients.stream().map(ClientDTO::from).collect(Collectors.toList());
     }

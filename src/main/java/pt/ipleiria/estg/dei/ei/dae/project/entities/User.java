@@ -9,22 +9,22 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-// Extra: try the other strategies… what happens to the database?
-public class User  extends Versionable{
+public class User extends Versionable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
     @Email
+    @Column(unique = true, nullable = false)
     private String email;
+
     @NotNull
     private String password;
+
     @NotNull
     private String name;
-
-
-//     Constructor with arguments ...
-//     Constructor without arguments...
-//     Getters and Setters ...
-
 
     public User(String email, String password, String name) {
         this.email = email;
@@ -35,7 +35,13 @@ public class User  extends Versionable{
     public User() {
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public @NotNull String getPassword() {
         return password;
@@ -63,12 +69,14 @@ public class User  extends Versionable{
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getEmail());
+        return Objects.hash(id);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return this.getEmail() == ((User)obj).getEmail();
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        User user = (User) obj;
+        return Objects.equals(id, user.id);
     }
-
 }

@@ -67,7 +67,7 @@ public class OrderBean {
         entityManager.remove(entityManager.find(Order.class, order));
     }
 
-    public void update(long code,float price, OrderState state, Date timestamp, String username) throws MyEntityNotFoundException, MyConstraintViolationException {
+    public void update(long code,float price, OrderState state, Date timestamp, long clientId) throws MyEntityNotFoundException, MyConstraintViolationException {
         Order order = entityManager.find(Order.class, code);
         if (order == null || !entityManager.contains(order)){
             return;
@@ -77,7 +77,7 @@ public class OrderBean {
             order.setPrice(price);
             order.setState(state);
             order.setTimestamp(timestamp);
-            order.setClient(clientBean.find(username));
+            order.setClient(clientBean.find(clientId));
             entityManager.merge(order);
         }catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);

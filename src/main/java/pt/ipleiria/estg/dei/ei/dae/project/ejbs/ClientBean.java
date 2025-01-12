@@ -21,10 +21,10 @@ public class ClientBean {
     @Inject
     private Hasher hasher;
 
-    public void update(String username, String password, String name, String email) throws  MyConstraintViolationException{
-        Client client = entityManager.find(Client.class, username);
-        if (client == null){
-            return;
+    public void update(Long id, String password, String name, String email) throws MyConstraintViolationException, MyEntityNotFoundException {
+        Client client = entityManager.find(Client.class, id);
+        if (client == null) {
+            throw new MyEntityNotFoundException("Client with id " + id + " not found.");
         }
 
         try {
@@ -32,20 +32,15 @@ public class ClientBean {
             client.setName(name);
             client.setEmail(email);
             entityManager.merge(client);
-
-        }catch (ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
     }
-    public void create(String email, String password, String name) throws MyEntityExistsException, MyConstraintViolationException {
-        if (entityManager.find(Client.class, email) != null) {
-            throw new MyEntityExistsException("Client  '"+email+"' already exists!");
-        }
 
+    public void create(String email, String password, String name) throws MyConstraintViolationException {
         try {
-            var client = new Client( email, hasher.hash(password), name);
+            var client = new Client(email, hasher.hash(password), name);
             entityManager.persist(client);
-            entityManager.flush(); // when using Hibernate, to force it to throw ConstraintViolationException, as in the JPA specification
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
@@ -56,17 +51,31 @@ public class ClientBean {
     }
 
 
-    public Client find(String email) throws  MyEntityNotFoundException {
-        var client = entityManager.find(Client.class,email);
+    public Client find(Long id) throws MyEntityNotFoundException {
+        Client client = entityManager.find(Client.class, id);
         if (client == null) {
-            throw new MyEntityNotFoundException("client " + email + " not found");
+            throw new MyEntityNotFoundException("Client with id " + id + " not found.");
         }
         return client;
     }
 
-    public void delete(String client) {
-        entityManager.remove(entityManager.find(Client.class, client));
+    public Client findByEmail(String email) throws MyEntityNotFoundException {
+        try {
+            return entityManager.createQuery(
+                            "SELECT c FROM Client c WHERE c.email = :email", Client.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (Exception e) { // Can handle NoResultException or others as needed
+            throw new MyEntityNotFoundException("Client with email " + email + " not found.");
+        }
     }
 
 
+    public void delete(Long id) throws MyEntityNotFoundException {
+        Client client = entityManager.find(Client.class, id);
+        if (client == null) {
+            throw new MyEntityNotFoundException("Client with id " + id + " not found.");
+        }
+        entityManager.remove(client);
+    }
 }
