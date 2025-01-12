@@ -30,7 +30,7 @@ public class ClientService {
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("/") // means: the relative url path is “/api/clients/”
     @Authenticated
-    @RolesAllowed({"manager"})
+    @RolesAllowed({"Manager"})
     public List<ClientDTO> getAllClients() {
         return ClientDTO.from(clientBean.findAll());
     }

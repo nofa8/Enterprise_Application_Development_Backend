@@ -8,6 +8,13 @@ import java.util.Date;
 
 @Entity
 @Table(name = "sensor_value_history")
+@NamedQueries({
+        @NamedQuery(
+                name = "getSensorHistory",
+                query = "SELECT s FROM SensorValueHistory s WHERE s.sensor.code = :sensorCode ORDER BY s.timestamp"
+        )
+}
+)
 public class SensorValueHistory {
 
     @Id
