@@ -1,3 +1,8 @@
+//MALTA IDENTIFIQUEM SFF O ENDPOINT AQUI
+
+//#####################################################################
+//TOKENS
+//#####################################################################
 ### REQUEST JWT TOKEN
 POST http://localhost:8080/monitor/api/auth/login
 Content-Type: application/json
@@ -13,17 +18,22 @@ Accept: application/json
 
 { "email": "admin1@admin.com", "password": "password1" }
 
+### Guardar os tokens nas variaveis (COPIAS OS TOKENS ANTERIORES PARA AQUI) - {nome do url randoom nao existe}
+@tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzY3MjMwOTcsImV4cCI6MTczNjcyNjY5N30.eswrXMwfcXOpddULfDnhKRfly7L8hx97k9dGA31tkYP0nNkLrlz4fm9lcdlWsFzD
+@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2NzI2OTIzLCJleHAiOjE3MzY3MzA1MjN9.SC7VM3NapuyYJjjvHjvyws98ZotCKJYk3g6orKlJuagxXbRVPreCk97hNkl-cxVa
+GET http://localhost:8080/monitor/api/guardaTokens
 
-### GET CLIENTS
-GET http://localhost:8080/monitor/api/clients
-Content-Type: application/json
+#######################################################################
+//ENDPOINTS
+//#####################################################################
 
-### GET Orders - Manager or client depends on the role od the user that you get the token
+
+### 1 -> GET Orders - Manager or client depends on the role od the user that you get the token
 GET http://localhost:8080/monitor/api/orders
 Content-Type: application/json
-Authorization: Bearer
+Authorization: Bearer {{tokenAdmin}}
 
-### POST VALOR SENSOR
+### 5 -> POST VALOR SENSOR
 POST  http://localhost:8080/monitor/api/orders/1/volumes/1/sensors HTTP/1.1
 Host: example.com
 Content-Type: application/json
@@ -33,3 +43,24 @@ Accept: application/json
 "code": 1,
 "value": "32"
 }]
+
+### 16 GET CLIENT (ainda a finalizar)
+GET http://localhost:8080/monitor/api/clients/1
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
+
+#######################################################################
+//PARA TESTES / OUTROS
+//#####################################################################
+
+### GET CLIENTS
+GET http://localhost:8080/monitor/api/clients
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
+
+
+
+
+
+
+
