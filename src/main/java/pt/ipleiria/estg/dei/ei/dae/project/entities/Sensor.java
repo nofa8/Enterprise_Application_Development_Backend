@@ -23,7 +23,7 @@ public class Sensor extends Versionable{
 
     @ManyToOne
     private SensorsType type;
-    @NotBlank
+
     private String value;
 
     @NotNull
@@ -77,12 +77,11 @@ public class Sensor extends Versionable{
         this.type = type;
     }
 
-    @NotBlank
     public String getValue() {
         return value;
     }
 
-    public void setValue(@NotBlank String value) {
+    public void setValue( String value) {
         this.value = value;
     }
 

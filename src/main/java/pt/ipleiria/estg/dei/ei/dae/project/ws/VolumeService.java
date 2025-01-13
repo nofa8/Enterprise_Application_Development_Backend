@@ -4,8 +4,11 @@ import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.PostVolumeDTO;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.ProductDTO;
 import pt.ipleiria.estg.dei.ei.dae.project.dtos.VolumeDTO;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.VolumeBean;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.Product;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
@@ -27,15 +30,21 @@ public class VolumeService {
 
     @POST
     @Path("/")
-    public Response createVolumes(@PathParam("code_order") Long orderId, List<VolumeDTO> volumeDTOs)
+    public Response createVolumes(@PathParam("code_order") Long orderId,
+                                  List<PostVolumeDTO> volumeDTOs)
             throws MyEntityNotFoundException, MyConstraintViolationException, MyEntityExistsException {
-        volumeBean.createVolumes(orderId, volumeDTOs);
-        return Response.status(Response.Status.CREATED).build();
+        try{
+            volumeBean.createVolumes(orderId, volumeDTOs);
+            return Response.status(Response.Status.CREATED).build();
+
+        }catch (IllegalStateException e){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
 
     @PATCH
     @Path("/{id:code_order}/volumes/{id:code_volume}")
-    public Response updateVolume(@PathParam("id:code_order") Long orderId,
+    public Response patchVolume(@PathParam("id:code_order") Long orderId,
                                  @PathParam("id:code_volume") Long volumeId,
                                  VolumeState state)
             throws MyEntityNotFoundException, MyConstraintViolationException {

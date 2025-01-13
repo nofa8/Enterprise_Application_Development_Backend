@@ -91,6 +91,7 @@ public class ConfigBean {
             productTypeBean.addSensor(1, sensorTypeBean.find(1), 10);
             productTypeBean.addSensor(2, sensorTypeBean.find(2), 5);
             productTypeBean.addSensor(3, sensorTypeBean.find(3), 8);
+            productTypeBean.addSensor(4, sensorTypeBean.find(1), 1);
 
             // Existing Package Types
             packageTypeBean.create(1, "Térmica");
@@ -106,6 +107,7 @@ public class ConfigBean {
             packageTypeBean.addSensor(1, sensorTypeBean.find(1), 10);
             packageTypeBean.addSensor(2, sensorTypeBean.find(2), 5);
             packageTypeBean.addSensor(3, sensorTypeBean.find(3), 8);
+            packageTypeBean.addSensor(4, sensorTypeBean.find(1), 1);
 
             // Existing Orders
             orderBean.create(1, 1.2f, OrderState.PROCESSED, Date.from(Instant.now()), Date.from(Instant.now()), 1);
@@ -136,9 +138,9 @@ public class ConfigBean {
             productBean.create(115, "Quinto", "Honda", 5, "SUV", 5);
 
             // Add Products to Volumes
-            volumeBean.addProductToVolume(1, 111); // Add Product with ID 111 to Volume 1
-            volumeBean.addProductToVolume(2, 112); // Add Product with ID 112 to Volume 2
-            volumeBean.addProductToVolume(3, 113); // Add Product with ID 113 to Volume 3
+            volumeBean.addProductToVolume(1, 111);
+            volumeBean.addProductToVolume(2, 112);
+            volumeBean.addProductToVolume(3, 113);
 
         } catch (Exception e) {
             logger.severe("Config Bean: "+e.getMessage());

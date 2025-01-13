@@ -3,10 +3,9 @@ package pt.ipleiria.estg.dei.ei.dae.project.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.PackageSensorMapping;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.ProductSensorMapping;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "package_types")
@@ -111,6 +110,18 @@ public class PackageType extends Versionable {
                 .orElseThrow(() -> new IllegalStateException("Sensor is not associated with this package."));
         mapping.setQuantity(quantity);
     }
+
+    public Map<Long, Integer> getSensorQuantities() {
+        Map<Long, Integer> sensorQuantities = new HashMap<>();
+        for (PackageSensorMapping map : sensors) {
+            Long sensorTypeCode = map.getSensor().getId();
+            int quantity = map.getQuantity();
+
+            sensorQuantities.merge(sensorTypeCode, quantity, Integer::sum);
+        }
+        return sensorQuantities;
+    }
+
 
     public void removeSensor(SensorsType sensor) {
         if (sensor == null) {

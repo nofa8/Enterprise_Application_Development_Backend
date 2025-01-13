@@ -7,7 +7,9 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Client;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.Volume;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.OrderState;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
@@ -82,6 +84,17 @@ public class OrderBean {
         }catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
         }
+
+    }
+
+    public void patchState(Long orderId, OrderState state) throws MyEntityNotFoundException {
+        Order order = entityManager.find(Order.class, orderId);
+        if (order == null) {
+            throw new MyEntityNotFoundException("Order with code " + orderId + " not found");
+        }
+
+        order.setState(state);
+        entityManager.merge(order);
 
     }
 

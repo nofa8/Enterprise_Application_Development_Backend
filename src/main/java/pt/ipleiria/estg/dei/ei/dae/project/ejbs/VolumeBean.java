@@ -5,8 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import org.hibernate.Hibernate;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.SensorDTO;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.VolumeDTO;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.*;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
@@ -14,8 +13,7 @@ import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class VolumeBean {
@@ -135,7 +133,7 @@ public class VolumeBean {
         return volume;
     }
 
-    public void createVolumes(long orderId, List<VolumeDTO> volumeDTOs)
+    public void createVolumes(long orderId, List<PostVolumeDTO> volumeDTOs)
             throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
 
         // Find the associated order
@@ -145,20 +143,57 @@ public class VolumeBean {
             throw new MyEntityNotFoundException("Order with code " + orderId + " not found");
         }
 
-        for (VolumeDTO volumeDTO : volumeDTOs) {
-            // Check if the volume already exists
-            if (entityManager.find(Volume.class, volumeDTO.getCode()) != null) {
-                throw new MyEntityExistsException("Volume with code " + volumeDTO.getCode() + " already exists");
-            }
+        Map<PostVolumeDTO, List<Sensor>> volumeSensorMap = new HashMap<>();
+        try {
+            for (PostVolumeDTO volumeDTO : volumeDTOs) {
 
-            // Find the associated package type
-            PackageType packageType = entityManager.find(PackageType.class, volumeDTO.getPackageTypeCode());
-            if (packageType == null) {
-                throw new MyEntityNotFoundException("Package Type with code " + volumeDTO.getPackageTypeCode() + " not found");
-            }
+                if (entityManager.find(Volume.class, volumeDTO.getCode()) != null) {
+                    throw new MyEntityExistsException("Volume with code " + volumeDTO.getCode() + " already exists");
+                }
 
-            try {
-                // Create and persist the volume
+                PackageType packageType = entityManager.find(PackageType.class, volumeDTO.getPackageTypeCode());
+                if (packageType == null) {
+                    throw new MyEntityNotFoundException("Package Type with code " + volumeDTO.getPackageTypeCode() + " not found");
+                }
+                Map<Long, Integer> sensorQuantities = new HashMap<>(packageType.getSensorQuantities());
+                for (PostVolumeProductDTO product:  volumeDTO.getProducts()){
+                    Product prod =  entityManager.find(Product.class, product.getCode());
+                    if (prod == null) {
+                        throw new MyEntityNotFoundException("Product with code " + product.getCode() + " not found");
+                    }
+
+                    ProductType prodType =  prod.getType();
+
+                    Map<Long, Integer> productSensorQuantities = prodType.getSensorQuantities();
+                    for (int i = 0; i < prod.getAmount(); i++) {
+                        for (Map.Entry<Long, Integer> entry : productSensorQuantities.entrySet()) {
+                            sensorQuantities.merge(entry.getKey(), entry.getValue(), Integer::sum);
+                        }
+                    }
+                }
+
+                List<Sensor> sensors = new ArrayList<>();
+
+                Map<Long, Integer> sensorTypeCounts = new HashMap<>();
+                for (PostVolumeSensorDTO sensor : volumeDTO.getSensors()) {
+                    SensorsType sensorsType = entityManager.find(SensorsType.class, sensor.getSensorTypeCode());
+                    if (sensorsType == null) {
+                        throw new MyEntityNotFoundException("Sensors Type with code " + sensor.getSensorTypeCode() + " not found");
+                    }
+
+                    // Increment the count for this sensor type
+                    sensorTypeCounts.merge(sensor.getSensorTypeCode(), 1, Integer::sum);
+
+                    sensors.add(new Sensor(sensor.getCode(), sensorsType, "", timestamp, null));
+
+                }
+
+
+                if (!sensorQuantities.equals(sensorTypeCounts)) {
+                    throw new IllegalStateException("The number of sensors does not correspond to the correct amount given the package type and product type of every product");
+                }
+
+
                 Volume volume = new Volume(
                         volumeDTO.getCode(),
                         volumeDTO.getState(),
@@ -166,22 +201,17 @@ public class VolumeBean {
                         order,
                         timestamp
                 );
-
                 entityManager.persist(volume);
-
-                for (SensorDTO sensor : volumeDTO.getSensors()){
-                    SensorsType sensorsType = entityManager.find(SensorsType.class,sensor.getSensorTypeCode());
-                    if (sensorsType == null) {
-                        throw new MyEntityNotFoundException("Sensors Type with code " + sensor.getSensorTypeCode() + " not found");
-                    }
-                    Sensor sensor1 = new Sensor(sensor.getCode(),sensorsType,sensor.getValue(),sensor.getLastUpdate(),volume);
-                    entityManager.persist(sensor1);
+                for (Sensor sensor : sensors) {
+                    sensor.setVolume(volume);
+                    entityManager.persist(sensor);
                 }
-            } catch (ConstraintViolationException e) {
-                throw new MyConstraintViolationException(e);
             }
+        } catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
         }
     }
+
 
     public void patchState(Long volumeId, VolumeState state) throws MyEntityNotFoundException {
         Volume volume = entityManager.find(Volume.class, volumeId);

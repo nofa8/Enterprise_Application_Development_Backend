@@ -16,6 +16,8 @@ import pt.ipleiria.estg.dei.ei.dae.project.ejbs.UserBean;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.VolumeBean;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.User;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.OrderState;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
@@ -83,11 +85,20 @@ public class OrderService {
         );
 
         Order newOrder = orderBean.find(orderDTO.getCode());
-
-
         return Response.status(Response.Status.CREATED)
                 .entity(OrderDTO.from(newOrder))
                 .build();
     }
 
+
+    @PATCH
+    @Path("/{id:code_order}")
+    public Response patchOrder(@PathParam("id:code_order") Long orderId,
+                                OrderState state)
+            throws MyEntityNotFoundException, MyConstraintViolationException {
+
+
+        orderBean.patchState(orderId,state);
+        return Response.ok().build();
+    }
 }

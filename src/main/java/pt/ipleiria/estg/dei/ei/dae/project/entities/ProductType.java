@@ -2,11 +2,10 @@ package pt.ipleiria.estg.dei.ei.dae.project.entities;
 
 
 import jakarta.persistence.*;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.PackageSensorMapping;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.ProductSensorMapping;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "product_types")
@@ -106,6 +105,18 @@ public class ProductType extends Versionable{
         // Update the quantity
         mapping.setQuantity(quantity);
     }
+
+    public Map<Long, Integer> getSensorQuantities() {
+        Map<Long, Integer> sensorQuantities = new HashMap<>();
+        for (ProductSensorMapping map : sensors) {
+            Long sensorTypeCode = map.getSensor().getId();
+            int quantity = map.getQuantity();
+
+            sensorQuantities.merge(sensorTypeCode, quantity, Integer::sum);
+        }
+        return sensorQuantities;
+    }
+
 
     public void removeSensor(SensorsType sensor) {
         if (sensor == null) {
