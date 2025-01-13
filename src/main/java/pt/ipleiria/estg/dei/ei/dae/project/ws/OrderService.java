@@ -69,6 +69,33 @@ public class OrderService {
         }
     }
 
+    @GET
+    @Path("{code}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
+    @Authenticated
+    public Response getOrderBasedOnRole(@PathParam("code") long code) throws MyEntityNotFoundException {
+        String username = securityContext.getUserPrincipal().getName();
+        User user = userBean.findOrFail(username);
+        Order order = orderBean.find(code);
+
+        if (securityContext.isUserInRole("Manager")) {
+            return Response.ok(OrderManagerDTO.from(order)).build();
+        } else if (securityContext.isUserInRole("Client")) {
+            if (order.getClient().getEmail().equals(user.getEmail())) {
+                return Response.ok(OrderClientDTO.from(order)).build();
+            } else {
+                return Response.status(Response.Status.FORBIDDEN)
+                        .entity("Access Denied: You can only view your own orders")
+                        .build();
+            }
+        } else {
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity("Access Denied")
+                    .build();
+        }
+    }
+
+
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)

@@ -19,8 +19,8 @@ Accept: application/json
 { "email": "admin1@admin.com", "password": "password1" }
 
 ### Guardar os tokens nas variaveis (COPIAS OS TOKENS ANTERIORES PARA AQUI) - {nome do url randoom nao existe}
-@tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzY3MjMwOTcsImV4cCI6MTczNjcyNjY5N30.eswrXMwfcXOpddULfDnhKRfly7L8hx97k9dGA31tkYP0nNkLrlz4fm9lcdlWsFzD
-@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2NzI2OTIzLCJleHAiOjE3MzY3MzA1MjN9.SC7VM3NapuyYJjjvHjvyws98ZotCKJYk3g6orKlJuagxXbRVPreCk97hNkl-cxVa
+@tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzY3MzQzODYsImV4cCI6MTczNjczNzk4Nn0.y6qMjoABVm5AN3DVyLNSgckEjAki-uQrrKX4EqJZxgpay6i9njhPrv4Iriay51Ld
+@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2NzM0Mzk1LCJleHAiOjE3MzY3Mzc5OTV9.tJ8HRIyqm8oPlnHr_I8qGIRtT6an70cU8LEXbzzDBJHw1691jcZgdSLTAvYpSmHn
 GET http://localhost:8080/monitor/api/guardaTokens
 
 #######################################################################
@@ -43,6 +43,17 @@ Accept: application/json
 "code": 1,
 "value": "32"
 }]
+
+### 7 GET ORDER de um cliente - SAC (ainda falta colocar os volumes bem)
+GET http://localhost:8080/monitor/api/orders/1
+Content-Type: application/json
+Authorization: Bearer {{tokenClient}}
+
+### 12 GET ORDER de um cliente - SGO (ainda falta colocar os volumes bem)
+GET http://localhost:8080/monitor/api/orders/1
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
+
 
 ### 16 GET CLIENT (ainda a finalizar)
 GET http://localhost:8080/monitor/api/clients/1
