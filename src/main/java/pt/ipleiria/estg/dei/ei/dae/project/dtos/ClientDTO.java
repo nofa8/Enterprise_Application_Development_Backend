@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.project.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Client;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
 
@@ -12,6 +13,7 @@ public class ClientDTO implements Serializable {
 
     private long id; // Using id as the primary key
     private String email; // Email remains unique, but it's not the primary key anymore
+    @JsonIgnore
     private String password;
     private String name;
     private List<OrderDTO> ordersDTO;

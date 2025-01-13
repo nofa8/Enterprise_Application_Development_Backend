@@ -20,7 +20,7 @@ Accept: application/json
 
 ### Guardar os tokens nas variaveis (COPIAS OS TOKENS ANTERIORES PARA AQUI) - {nome do url randoom nao existe}
 @tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzY3MzQzODYsImV4cCI6MTczNjczNzk4Nn0.y6qMjoABVm5AN3DVyLNSgckEjAki-uQrrKX4EqJZxgpay6i9njhPrv4Iriay51Ld
-@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2NzM0Mzk1LCJleHAiOjE3MzY3Mzc5OTV9.tJ8HRIyqm8oPlnHr_I8qGIRtT6an70cU8LEXbzzDBJHw1691jcZgdSLTAvYpSmHn
+@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2NzczODA2LCJleHAiOjE3MzY3Nzc0MDZ9.IQw85kWgdkDGyndaC4MSgs-crRzrqwhY8irg0Qj2iALBa4GM3Y3s1qB6ygC240it
 GET http://localhost:8080/monitor/api/guardaTokens
 
 #######################################################################

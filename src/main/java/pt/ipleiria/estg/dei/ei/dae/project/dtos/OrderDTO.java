@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.project.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.OrderState;
 
@@ -17,6 +18,7 @@ public class OrderDTO implements Serializable {
     private OrderState state;
     private Date purchaseDate;
     private Date lastUpdate;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY) // Só inclui se não for null
     private List<VolumeDTO> volumes;
 
     public OrderDTO(long code, float price, long clientCode, OrderState state, Date purchaseDate, Date lastUpdate) {
