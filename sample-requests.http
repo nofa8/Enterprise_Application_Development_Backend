@@ -1,5 +1,10 @@
+//MALTA IDENTIFIQUEM SFF O ENDPOINT AQUI
+
+//#####################################################################
+//TOKENS
+//#####################################################################
 ### REQUEST JWT TOKEN
-POST http://localhost:8080/project/api/auth/login
+POST http://localhost:8080/monitor/api/auth/login
 Content-Type: application/json
 Accept: application/json
 
@@ -7,18 +12,66 @@ Accept: application/json
 
 
 ### REQUEST JWT TOKEN
-POST http://localhost:8080/project/api/auth/login
+POST http://localhost:8080/monitor/api/auth/login
 Content-Type: application/json
 Accept: application/json
 
 { "email": "admin1@admin.com", "password": "password1" }
 
+### Guardar os tokens nas variaveis (COPIAS OS TOKENS ANTERIORES PARA AQUI) - {nome do url randoom nao existe}
+@tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzY3MzQzODYsImV4cCI6MTczNjczNzk4Nn0.y6qMjoABVm5AN3DVyLNSgckEjAki-uQrrKX4EqJZxgpay6i9njhPrv4Iriay51Ld
+@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2NzM0Mzk1LCJleHAiOjE3MzY3Mzc5OTV9.tJ8HRIyqm8oPlnHr_I8qGIRtT6an70cU8LEXbzzDBJHw1691jcZgdSLTAvYpSmHn
+GET http://localhost:8080/monitor/api/guardaTokens
+
+#######################################################################
+//ENDPOINTS
+//#####################################################################
+
+
+### 1 -> GET Orders - Manager or client depends on the role od the user that you get the token
+GET http://localhost:8080/monitor/api/orders
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
+
+### 5 -> POST VALOR SENSOR
+POST  http://localhost:8080/monitor/api/orders/1/volumes/1/sensors HTTP/1.1
+Host: example.com
+Content-Type: application/json
+Accept: application/json
+
+[{
+"code": 1,
+"value": "32"
+}]
+
+### 7 GET ORDER de um cliente - SAC (ainda falta colocar os volumes bem)
+GET http://localhost:8080/monitor/api/orders/1
+Content-Type: application/json
+Authorization: Bearer {{tokenClient}}
+
+### 12 GET ORDER de um cliente - SGO (ainda falta colocar os volumes bem)
+GET http://localhost:8080/monitor/api/orders/1
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
+
+
+### 16 GET CLIENT (ainda a finalizar)
+GET http://localhost:8080/monitor/api/clients/1
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
+
+#######################################################################
+//PARA TESTES / OUTROS
+//#####################################################################
 
 ### GET CLIENTS
-GET http://localhost:8080/project/api/clients
+GET http://localhost:8080/monitor/api/clients
 Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
 
-### GET Orders - Manager or client depends on the role od the user that you get the token
-GET http://localhost:8080/project/api/orders
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2NTI3MjUwLCJleHAiOjE3MzY1MzA4NTB9.CGH810XIoBzR1Vz1n6gpAFtBY_rTZWwnQJoKoof9ijMgiSKTBIvnBJ9zGJI9hlIn
+
+
+
+
+
+

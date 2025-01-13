@@ -4,6 +4,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.SensorDataDTO;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.SensorValueHistory;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Volume;
@@ -95,4 +96,15 @@ public class SensorBean {
                 .getResultList();
     }
 
+    public void createNewValue(List<SensorDataDTO> sensorDataNew) throws MyEntityNotFoundException {
+       for(SensorDataDTO sensorData : sensorDataNew) {
+           Sensor sensor = entityManager.find(Sensor.class, sensorData.getCode());
+           if(sensor == null){
+               throw new MyEntityNotFoundException("Sensor not found");
+           }
+           sensor.setValue(sensorData.getValue());
+           updateSensorValue(sensor);
+           entityManager.persist(sensor);
+       }
+    }
 }

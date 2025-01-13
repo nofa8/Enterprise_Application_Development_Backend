@@ -101,7 +101,7 @@ public class OrderDTO implements Serializable {
                 order.getPurchaseDate(),
                 order.getTimestamp()
         );
-        dto.setVolumes(VolumeDTO.from(order.getVolumes()));
+        //dto.setVolumes(VolumeDTO.from(order.getVolumes()));
         return dto;
     }
 

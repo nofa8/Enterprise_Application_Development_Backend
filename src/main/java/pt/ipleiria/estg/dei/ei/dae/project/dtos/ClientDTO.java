@@ -14,18 +14,18 @@ public class ClientDTO implements Serializable {
     private String email; // Email remains unique, but it's not the primary key anymore
     private String password;
     private String name;
-    private List<Order> orders;
+    private List<OrderDTO> ordersDTO;
 
     public ClientDTO(long id, String email, String password, String name) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
-        orders = new ArrayList<>();
+        ordersDTO = new ArrayList<>();
     }
 
     public ClientDTO() {
-        orders = new ArrayList<>();
+        ordersDTO = new ArrayList<>();
     }
 
     public long getId() {
@@ -60,13 +60,17 @@ public class ClientDTO implements Serializable {
         this.name = name;
     }
 
-    public List<Order> getOrders() {
-        return new ArrayList<>(orders);
+    public List<OrderDTO> getOrdersDTO() {
+        return new ArrayList<>(ordersDTO);
+    }
+    public void setOrdersDTO(List<OrderDTO> ordersDTO) {
+        if (ordersDTO == null) {
+            return;
+        }
+
+        this.ordersDTO = new ArrayList<>(ordersDTO);
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
 
     public static ClientDTO from(Client client) {
         return new ClientDTO(
@@ -81,4 +85,6 @@ public class ClientDTO implements Serializable {
     public static List<ClientDTO> from(List<Client> clients) {
         return clients.stream().map(ClientDTO::from).collect(Collectors.toList());
     }
+
+
 }

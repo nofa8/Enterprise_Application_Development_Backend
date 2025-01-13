@@ -7,7 +7,9 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolationException;
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Client;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
 import pt.ipleiria.estg.dei.ei.dae.project.security.Hasher;
@@ -60,6 +62,13 @@ public class ClientBean {
         return client;
     }
 
+    public Client findWithOrders(Long id) throws MyEntityNotFoundException{
+        var client = this.find(id);
+        Hibernate.initialize(client.getOrders());
+        List<Order> orders = client.getOrders();
+        return client;
+    }
+
     public Client findByEmail(String email) throws MyEntityNotFoundException {
         try {
             return entityManager.createQuery(
@@ -72,6 +81,8 @@ public class ClientBean {
             throw new MyEntityNotFoundException("Database error occurred while searching for client with email " + email);
         }
     }
+
+
 
 
 
