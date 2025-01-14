@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.project.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.SensorValueHistory;
 
 import java.io.Serializable;
@@ -8,7 +9,9 @@ import java.util.stream.Collectors;
 
 public class SensorLogDTO implements Serializable {
 
+    @JsonIgnore
     private Long id;
+    @JsonIgnore
     private SensorDTO sensor; // Assuming SensorDTO is another DTO for the Sensor entity
     private String value;
     private String timestamp;

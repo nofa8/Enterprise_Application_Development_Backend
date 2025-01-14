@@ -20,7 +20,7 @@ Accept: application/json
 
 ### Guardar os tokens nas variaveis (COPIAS OS TOKENS ANTERIORES PARA AQUI) - {nome do url randoom nao existe}
 @tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzY3MzQzODYsImV4cCI6MTczNjczNzk4Nn0.y6qMjoABVm5AN3DVyLNSgckEjAki-uQrrKX4EqJZxgpay6i9njhPrv4Iriay51Ld
-@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2NzczODA2LCJleHAiOjE3MzY3Nzc0MDZ9.IQw85kWgdkDGyndaC4MSgs-crRzrqwhY8irg0Qj2iALBa4GM3Y3s1qB6ygC240it
+@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2ODg3MjMyLCJleHAiOjE3MzY4OTA4MzJ9.GbBaJP6wwWnOTipNHPpLC-EOe6woInRFZigGUtzgimtzo20lQW0X_HeK9TLf5M9L
 GET http://localhost:8080/monitor/api/guardaTokens
 
 #######################################################################
@@ -41,7 +41,7 @@ Accept: application/json
 
 [{
 "code": 1,
-"value": "32"
+"value": "3"
 }]
 
 ### 7 GET ORDER de um cliente - SAC (ainda falta colocar os volumes bem)
@@ -55,7 +55,7 @@ Content-Type: application/json
 Authorization: Bearer {{tokenAdmin}}
 
 
-### 16 GET CLIENT (ainda a finalizar)
+### 16 GET CLIENT
 GET http://localhost:8080/monitor/api/clients/1
 Content-Type: application/json
 Authorization: Bearer {{tokenAdmin}}
@@ -71,7 +71,9 @@ Authorization: Bearer {{tokenAdmin}}
 
 
 
+### TODOS LOGS SENSORES
+GET http://localhost:8080/monitor/api/orders/1/volumes/1/sensors
 
-
-
-
+### TODOS volume
+GET http://localhost:8080/monitor/api/orders/1/volumes/1
+Authorization: Bearer {{tokenAdmin}}
