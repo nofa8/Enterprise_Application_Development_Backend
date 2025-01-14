@@ -56,8 +56,8 @@ public class VolumeService {
     @Path("/{code_volume}")
     @Authenticated
     public Response getVolumeDetails(@PathParam("code_order") Long orderId,
-                                     @PathParam("code_volume") Long volumeId) {
-        VolumeDTO volumeDetails = VolumeDTO.from(volumeBean.find(volumeId));
+                                     @PathParam("code_volume") Long volumeId) throws MyEntityNotFoundException {
+        VolumeDTO volumeDetails = VolumeDTO.from(volumeBean.findWithProductsAndSensors(volumeId));
         return Response.ok(volumeDetails).build();
     }
 }

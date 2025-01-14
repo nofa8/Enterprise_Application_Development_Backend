@@ -133,6 +133,26 @@ public class VolumeBean {
         return volume;
     }
 
+    public Volume findWithSensors(long volumeCode) throws MyEntityNotFoundException {
+        Volume volume = entityManager.find(Volume.class, volumeCode);
+        if (volume == null) {
+            throw new MyEntityNotFoundException("Volume with code " + volumeCode + " not found.");
+        }
+        Hibernate.initialize(volume.getSensors());
+        return volume;
+    }
+
+    public Volume findWithProductsAndSensors(long volumeCode) throws MyEntityNotFoundException {
+        Volume volume = entityManager.find(Volume.class, volumeCode);
+        if (volume == null) {
+            throw new MyEntityNotFoundException("Volume with code " + volumeCode + " not found.");
+        }
+        Hibernate.initialize(volume.getProducts());
+        Hibernate.initialize(volume.getSensors());
+
+        return volume;
+    }
+
     public void createVolumes(long orderId, List<PostVolumeDTO> volumeDTOs)
             throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
 

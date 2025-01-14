@@ -11,9 +11,7 @@ import jakarta.ws.rs.core.SecurityContext;
 import org.jboss.resteasy.plugins.server.servlet.ServletSecurityContext;
 import pt.ipleiria.estg.dei.ei.dae.project.dtos.*;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.*;
-import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
-import pt.ipleiria.estg.dei.ei.dae.project.entities.User;
-import pt.ipleiria.estg.dei.ei.dae.project.entities.Volume;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.*;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
@@ -75,5 +73,46 @@ public class SensorService {
                     .build();
         }
     }
+
+
+    @GET
+    public Response getSensorHistory(
+            @PathParam("code_order") Long codeOrder,
+            @PathParam("code_volume") Long codeVolume) {
+
+        try {
+            // Verificar se o volume existe
+            Volume volume = volumeBean.findWithSensors(codeVolume);
+            if (volume == null) {
+                throw new MyEntityNotFoundException("Volume com ID " + codeVolume + " não encontrado.");
+            }
+
+            // Converter o Sensor em SensorDTO
+            List<SensorDTO> sensorsDTO = SensorDTO.from(volume.getSensors());
+
+
+            for (SensorDTO sensorDTO : sensorsDTO) {
+                List<SensorValueHistory> sensorValueHistories = sensorBean.getSensorHistory(sensorDTO.getCode());
+                List<SensorLogDTO> log = SensorLogDTO.from(sensorValueHistories);
+               sensorDTO.setLog(log);
+            }
+
+
+
+            // Retornar a lista de SensorDTO como resposta
+            return Response.ok(sensorsDTO).build();
+
+        } catch (MyEntityNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao obter o histórico dos sensores: " + e.getMessage())
+                    .build();
+        }
+    }
+
+
 
 }
