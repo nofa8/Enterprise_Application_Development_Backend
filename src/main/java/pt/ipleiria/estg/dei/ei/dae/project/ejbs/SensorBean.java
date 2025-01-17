@@ -96,6 +96,8 @@ public class SensorBean {
                 .getResultList();
     }
 
+
+
     public void createNewValue(List<SensorDataDTO> sensorDataNew) throws MyEntityNotFoundException {
        for(SensorDataDTO sensorData : sensorDataNew) {
            Sensor sensor = entityManager.find(Sensor.class, sensorData.getCode());

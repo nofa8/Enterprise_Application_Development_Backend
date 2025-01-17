@@ -32,14 +32,12 @@ public class Volume extends Versionable {
     @ManyToOne
     private PackageType typePackage;
 
-
     @NotNull
     @ManyToOne
     private Order order;
 
     @NotNull
     private Date timestamp;
-
 
     @NotNull
     @OneToMany(mappedBy = "volume")
