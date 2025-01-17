@@ -2,13 +2,18 @@ package pt.ipleiria.estg.dei.ei.dae.project.ws;
 
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.PostVolumeDTO;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.ProductDTO;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.VolumeDTO;
+import jakarta.ws.rs.core.SecurityContext;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.*;
+import pt.ipleiria.estg.dei.ei.dae.project.ejbs.ClientBean;
+import pt.ipleiria.estg.dei.ei.dae.project.ejbs.UserBean;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.VolumeBean;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Product;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.User;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.Volume;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
@@ -27,6 +32,14 @@ public class VolumeService {
 
     @EJB
     private VolumeBean volumeBean;
+
+    @EJB
+    private ClientBean clientBean;
+    @EJB
+    private UserBean userBean;
+
+    @Context
+    private SecurityContext securityContext;
 
     @POST
     @Path("/")
@@ -57,7 +70,16 @@ public class VolumeService {
     @Authenticated
     public Response getVolumeDetails(@PathParam("code_order") Long orderId,
                                      @PathParam("code_volume") Long volumeId) throws MyEntityNotFoundException {
-        VolumeDTO volumeDetails = VolumeDTO.from(volumeBean.findWithProductsAndSensors(volumeId));
-        return Response.ok(volumeDetails).build();
+
+        String username = securityContext.getUserPrincipal().getName();
+        User user = userBean.findOrFail(username);
+        Volume volume = volumeBean.find(volumeId);
+        Order order = volume.getOrder();
+
+        if (order.getCode() == orderId && (securityContext.isUserInRole("Manager") || ((securityContext.isUserInRole("Client")) && order.getClient().getEmail().equals(user.getEmail())))){
+            VolumeDTO volumeDetails = VolumeDTO.from(volumeBean.findWithProductsAndSensors(volumeId));
+            return Response.ok(volumeDetails).build();
+        }
+        return Response.status(404).build();
     }
 }

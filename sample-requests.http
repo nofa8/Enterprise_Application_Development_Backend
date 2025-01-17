@@ -3,12 +3,22 @@
 //#####################################################################
 //TOKENS
 //#####################################################################
-### REQUEST JWT TOKEN
+### REQUEST JWT TOKEN 1
 POST http://localhost:8080/monitor/api/auth/login
 Content-Type: application/json
 Accept: application/json
 
+
 { "email": "email@email.com", "password": "password" }
+
+### REQUEST JWT TOKEN 2
+POST http://localhost:8080/monitor/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{ "email": "email2@email.com", "password": "dois" }
+
+
 
 
 ### REQUEST JWT TOKEN
@@ -19,8 +29,9 @@ Accept: application/json
 { "email": "admin1@admin.com", "password": "password1" }
 
 ### Guardar os tokens nas variaveis (COPIAS OS TOKENS ANTERIORES PARA AQUI) - {nome do url randoom nao existe}
-@tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzY3MzQzODYsImV4cCI6MTczNjczNzk4Nn0.y6qMjoABVm5AN3DVyLNSgckEjAki-uQrrKX4EqJZxgpay6i9njhPrv4Iriay51Ld
-@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2ODg3MjMyLCJleHAiOjE3MzY4OTA4MzJ9.GbBaJP6wwWnOTipNHPpLC-EOe6woInRFZigGUtzgimtzo20lQW0X_HeK9TLf5M9L
+@tokenClient =eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzcxMTA4MjUsImV4cCI6MTczNzExNDQyNX0.p1JLai-FTSO8F7DcVp3N2jT7yu0veGBWT7B5uRptsFJmzawdGcPCpkARGPqjUtFs
+@tokenClient2 =eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbDJAZW1haWwuY29tIiwiaWF0IjoxNzM3MTEwODM2LCJleHAiOjE3MzcxMTQ0MzZ9.N-DzcwfVOgBLrQjP61KF5c05aNUgubjN1TV-X9HeLNR9eALVN0nh5V6x24SWMBIa
+@tokenAdmin =eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM3MTEwODQ2LCJleHAiOjE3MzcxMTQ0NDZ9.UBdmyeqrJRpNDg5FivoVbPSZXVmidTiaNGA2j4dx-izhc3mUzOhqcAEMNdpBhcLS
 GET http://localhost:8080/monitor/api/guardaTokens
 
 #######################################################################
@@ -49,6 +60,10 @@ GET http://localhost:8080/monitor/api/orders/1
 Content-Type: application/json
 Authorization: Bearer {{tokenClient}}
 
+### 8 VOLUME ESPECIFICO
+GET http://localhost:8080/monitor/api/orders/1/volumes/1
+Authorization: Bearer {{tokenClient}}
+
 ### 12 GET ORDER de um cliente - SGO (ainda falta colocar os volumes bem)
 GET http://localhost:8080/monitor/api/orders/1
 Content-Type: application/json
@@ -59,6 +74,12 @@ Authorization: Bearer {{tokenAdmin}}
 GET http://localhost:8080/monitor/api/clients/1
 Content-Type: application/json
 Authorization: Bearer {{tokenAdmin}}
+
+
+###  LOGS SENSORES
+GET http://localhost:8080/monitor/api/orders/1/volumes/1/sensors
+Content-Type: application/json
+Authorization: Bearer {{tokenClient2}}
 
 #######################################################################
 //PARA TESTES / OUTROS
@@ -71,8 +92,7 @@ Authorization: Bearer {{tokenAdmin}}
 
 
 
-### TODOS LOGS SENSORES
-GET http://localhost:8080/monitor/api/orders/1/volumes/1/sensors
+
 
 ### TODOS volume
 GET http://localhost:8080/monitor/api/orders/1/volumes/1
