@@ -13,16 +13,20 @@ import java.util.stream.Collectors;
 public class OrderManagerDTO implements Serializable {
     private long code;
     private float price;
+    private OrderState state;
     private ClientInfoInOrderDTO client;
+    private String lastUpdate;
     private String purchaseDate;
     private List<VolumeDTO> volumes;
 
     // Constructor
-    public OrderManagerDTO(long code, float price, ClientInfoInOrderDTO client, String purchaseDate) {
+    public OrderManagerDTO(long code, float price, OrderState state, ClientInfoInOrderDTO client, String purchaseDate, String lastUpdate) {
         this.code = code;
         this.price = price;
+        this.state = state;
         this.client = client;
         this.purchaseDate = purchaseDate;
+        this.lastUpdate = lastUpdate;
         this.volumes = new ArrayList<>();
     }
 
@@ -51,6 +55,22 @@ public class OrderManagerDTO implements Serializable {
 
     public List<VolumeDTO> getVolumes() {
         return new ArrayList<>(volumes);
+    }
+
+    public OrderState getState() {
+        return state;
+    }
+
+    public String getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setState(OrderState state) {
+        this.state = state;
+    }
+
+    public void setLastUpdate(String lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public void setCode(long code) {
@@ -88,11 +108,14 @@ public class OrderManagerDTO implements Serializable {
     // Method to convert from Order entity to DTO
     public static OrderManagerDTO from(Order order) {
         String formattedPurchaseDate = formatDate(order.getPurchaseDate());
+        String formattedLastUpdate = formatDate(order.getTimestamp());
         OrderManagerDTO orderManagerDTO = new OrderManagerDTO(
                 order.getCode(),
                 order.getPrice(),
+                order.getState(),
                 ClientInfoInOrderDTO.from(order.getClient()),
-                formattedPurchaseDate
+                formattedPurchaseDate,
+                formattedLastUpdate
         );
         //orderManagerDTO.setVolumes(VolumeDTO.from(order.getVolumes()));
         return orderManagerDTO;
