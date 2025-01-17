@@ -43,7 +43,7 @@ public class VolumeService {
 
     @POST
     @Path("/")
-    @Authenticated
+//    @Authenticated
     public Response createVolumes(@PathParam("code_order") Long orderId,
                                   List<PostVolumeDTO> volumeDTOs)
             throws MyEntityNotFoundException, MyConstraintViolationException, MyEntityExistsException {

@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.dae.project.dtos;
 
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Product;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.ProductVolumeMapping;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +20,7 @@ public class ProductDTO implements Serializable {
     public ProductDTO() {
     }
 
-    public ProductDTO(long code, String name, String brand, long productTypeCode, String description, int amount) {
+    public ProductDTO(long code, String name, String brand, long productTypeCode, String description , int amount) {
         this.code = code;
         this.name = name;
         this.brand = brand;
@@ -78,19 +79,19 @@ public class ProductDTO implements Serializable {
     }
 
     // Static method to convert a Product entity to ProductDTO
-    public static ProductDTO from(Product product) {
+    public static ProductDTO from(ProductVolumeMapping product) {
         return new ProductDTO(
-                product.getCode(),
-                product.getName(),
-                product.getBrand(),
-                product.getType() != null ? product.getType().getCode() : 0,  // Assuming ProductType has a `getCode()` method
-                product.getDescription(),
-                product.getAmount()
+                product.getProduct().getCode(),
+                product.getProduct().getName(),
+                product.getProduct().getBrand(),
+                product.getProduct().getType() != null ? product.getProduct().getType().getCode() : 0,  // Assuming ProductType has a `getCode()` method
+                product.getProduct().getDescription()
+                ,product.getAmount()
         );
     }
 
     // Static method to convert a list of Product entities to a list of ProductDTOs
-    public static List<ProductDTO> from(List<Product> products) {
+    public static List<ProductDTO> from(List<ProductVolumeMapping> products) {
         return products.stream().map(ProductDTO::from).collect(Collectors.toList());
     }
 }

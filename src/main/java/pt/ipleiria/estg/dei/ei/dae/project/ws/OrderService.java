@@ -42,7 +42,6 @@ public class OrderService {
     @EJB
     private OrderBean orderBean;
 
-
     @Context
     private SecurityContext securityContext;
 

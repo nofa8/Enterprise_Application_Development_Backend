@@ -11,6 +11,7 @@ import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Volume;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.OrderState;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.ProductVolumeMapping;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
@@ -67,6 +68,9 @@ public class OrderBean {
         for (Volume vol : order.getVolumes()){
             Hibernate.initialize(vol.getSensors());
             Hibernate.initialize(vol.getProducts());
+            for (ProductVolumeMapping prod : vol.getProducts()){
+                Hibernate.initialize(prod.getProduct());
+            }
         }
         return order;
     }

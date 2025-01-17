@@ -6,6 +6,7 @@ import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.OrderState;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.ProductVolumeMapping;
 
 import java.time.Instant;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
 @Startup
 public class ConfigBean {
 
-    private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
+    public static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
     @EJB
     private ClientBean clientBean;
 
@@ -40,6 +41,9 @@ public class ConfigBean {
 
     @EJB
     private LogisticBean logisticBean;
+
+    @EJB
+    private ProductVolumeMappingBean productVolumeMapping;
 
     @PostConstruct
     public void populateDB() {
@@ -138,9 +142,9 @@ public class ConfigBean {
             productBean.create(115, "Quinto", "Honda", 5, "SUV", 5);
 
             // Add Products to Volumes
-            volumeBean.addProductToVolume(1, 111);
-            volumeBean.addProductToVolume(2, 112);
-            volumeBean.addProductToVolume(3, 113);
+            productVolumeMapping.create(111, 1,1);
+            productVolumeMapping.create(112, 2,1);
+            productVolumeMapping.create(113, 3,1);
 
         } catch (Exception e) {
             logger.severe("Config Bean: "+e.getMessage());
