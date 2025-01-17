@@ -101,6 +101,7 @@ public class OrderService {
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Authenticated
     public Response createNewOrder (OrderDTO orderDTO) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
         orderBean.create(
                 orderDTO.getCode(),
@@ -120,6 +121,7 @@ public class OrderService {
 
     @PATCH
     @Path("/{id:code_order}")
+    @Authenticated
     public Response patchOrder(@PathParam("id:code_order") Long orderId,
                                 OrderState state)
             throws MyEntityNotFoundException, MyConstraintViolationException {
