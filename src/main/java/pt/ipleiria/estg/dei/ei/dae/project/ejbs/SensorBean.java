@@ -107,4 +107,14 @@ public class SensorBean {
            entityManager.persist(sensor);
        }
     }
+
+    public void createNewSingleValue(SensorDataDTO sensorData) throws MyEntityNotFoundException {
+        Sensor sensor = entityManager.find(Sensor.class, sensorData.getCode());
+        if(sensor == null){
+            throw new MyEntityNotFoundException("Sensor not found");
+        }
+        sensor.setValue(sensorData.getValue());
+        updateSensorValue(sensor);
+        entityManager.persist(sensor);
+    }
 }

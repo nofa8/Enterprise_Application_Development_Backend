@@ -1,0 +1,62 @@
+package pt.ipleiria.estg.dei.ei.dae.project.ws;
+
+
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.EJB;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.ClientDTO;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.SensorDTO;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.SensorDataDTO;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.SimpleSensorDTO;
+import pt.ipleiria.estg.dei.ei.dae.project.ejbs.SensorBean;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.Sensor;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.Volume;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.OrderState;
+import pt.ipleiria.estg.dei.ei.dae.project.security.Authenticated;
+
+import java.util.List;
+
+import static pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState.DELIVERED;
+import static pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState.RETURNED;
+
+@Path("sensors") // relative url web path for this service
+@Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
+@Consumes({MediaType.APPLICATION_JSON})
+public class GlobalSensorsService {
+    @EJB
+    private SensorBean sensorBean;
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/") // means: the relative url path is “/api/clients/”
+    public List<SimpleSensorDTO> getAllSensors() {
+        return SimpleSensorDTO.from(sensorBean.findAll());
+    }
+
+    @POST
+    @Path("/{id:sensorId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response receiveSensorData(@PathParam("id:sensorId") Long sensorId,
+                                      String sensorDataNew) {
+        Sensor sensor = sensorBean.find(sensorId);
+        if (sensor == null){
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .build();
+        }
+        Volume volume = sensor.getVolume();
+        if(volume.getState()== DELIVERED || volume.getState()== RETURNED){
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .build();
+        }
+        SensorDataDTO sensorDataDTO = new SensorDataDTO(sensorDataNew,sensorId);
+        try {
+            sensorBean.createNewSingleValue(sensorDataDTO);
+            return Response.ok().build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .build();
+        }
+    }
+}
