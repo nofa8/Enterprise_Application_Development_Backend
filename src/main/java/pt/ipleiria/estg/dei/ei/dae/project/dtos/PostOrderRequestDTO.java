@@ -1,27 +1,32 @@
 package pt.ipleiria.estg.dei.ei.dae.project.dtos;
 
 import jakarta.validation.constraints.NotNull;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.OrderState;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PostOrderRequestDTO implements Serializable {
 
     @NotNull
-    private int code;
+    private long code;
 
     @NotNull
-    private String price;
+    private float price;
 
     @NotNull
-    private int clientCode;
+    private long clientCode;
 
     @NotNull
-    private String state;
+    private OrderState state;
 
     @NotNull
-    private String purchaseDate;
+    private Date purchaseDate;
 
-    public PostOrderRequestDTO(int code, String price, int clientCode, String state, String purchaseDate) {
+    public PostOrderRequestDTO(long code, float price, long clientCode, OrderState state, Date purchaseDate) {
         this.code = code;
         this.price = price;
         this.clientCode = clientCode;
@@ -33,43 +38,63 @@ public class PostOrderRequestDTO implements Serializable {
     }
 
     // Getters and Setters
-    public int getCode() {
+    public long getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(long code) {
         this.code = code;
     }
 
-    public String getPrice() {
-        return price;
-    }
 
-    public void setPrice(String price) {
-        this.price = price;
-    }
 
-    public int getClientCode() {
+    public long getClientCode() {
         return clientCode;
     }
 
-    public void setClientCode(int clientCode) {
+    public void setClientCode(long clientCode) {
         this.clientCode = clientCode;
     }
 
-    public String getState() {
+    @NotNull
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(@NotNull float price) {
+        this.price = price;
+    }
+
+    public @NotNull OrderState getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(@NotNull OrderState state) {
         this.state = state;
     }
 
-    public String getPurchaseDate() {
+    public @NotNull Date getPurchaseDate() {
         return purchaseDate;
     }
 
-    public void setPurchaseDate(String purchaseDate) {
+    public void setPurchaseDate(@NotNull Date purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
+
+    public static PostOrderRequestDTO from(Order order) {
+        PostOrderRequestDTO dto = new PostOrderRequestDTO(
+                order.getCode(),
+                order.getPrice(),
+                order.getClientId(),
+                order.getState(),
+                order.getPurchaseDate()
+        );
+        return dto;
+    }
+
+    public static List<PostOrderRequestDTO> from(List<Order> orders) {
+        return orders.stream().map(PostOrderRequestDTO::from).collect(Collectors.toList());
+    }
+
+
 }

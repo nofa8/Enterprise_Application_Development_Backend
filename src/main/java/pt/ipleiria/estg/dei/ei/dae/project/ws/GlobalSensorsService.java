@@ -29,7 +29,7 @@ public class GlobalSensorsService {
     private SensorBean sensorBean;
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
-    @Path("/") // means: the relative url path is “/api/clients/”
+    @Path("/")
     public List<SimpleSensorDTO> getAllSensors() {
         return SimpleSensorDTO.from(sensorBean.findAll());
     }

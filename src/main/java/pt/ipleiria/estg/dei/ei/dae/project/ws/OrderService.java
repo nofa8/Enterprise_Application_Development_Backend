@@ -101,14 +101,14 @@ public class OrderService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Authenticated
-    public Response createNewOrder (OrderDTO orderDTO) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
+    public Response createNewOrder (PostOrderRequestDTO orderDTO) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
         orderBean.create(
                 orderDTO.getCode(),
                 orderDTO.getPrice(),
                 orderDTO.getState(),
                 orderDTO.getPurchaseDate(),
                 Date.from(Instant.now()),
-                orderDTO.getClientId()
+                orderDTO.getClientCode()
         );
 
         Order newOrder = orderBean.find(orderDTO.getCode());
