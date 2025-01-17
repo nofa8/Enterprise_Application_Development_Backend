@@ -20,7 +20,6 @@ Accept: application/json
 
 
 
-
 ### REQUEST JWT TOKEN
 POST http://localhost:8080/monitor/api/auth/login
 Content-Type: application/json
@@ -29,9 +28,9 @@ Accept: application/json
 { "email": "admin1@admin.com", "password": "password1" }
 
 ### Guardar os tokens nas variaveis (COPIAS OS TOKENS ANTERIORES PARA AQUI) - {nome do url randoom nao existe}
-@tokenClient =eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzcxMTA4MjUsImV4cCI6MTczNzExNDQyNX0.p1JLai-FTSO8F7DcVp3N2jT7yu0veGBWT7B5uRptsFJmzawdGcPCpkARGPqjUtFs
-@tokenClient2 =eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbDJAZW1haWwuY29tIiwiaWF0IjoxNzM3MTEwODM2LCJleHAiOjE3MzcxMTQ0MzZ9.N-DzcwfVOgBLrQjP61KF5c05aNUgubjN1TV-X9HeLNR9eALVN0nh5V6x24SWMBIa
-@tokenAdmin =eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM3MTEwODQ2LCJleHAiOjE3MzcxMTQ0NDZ9.UBdmyeqrJRpNDg5FivoVbPSZXVmidTiaNGA2j4dx-izhc3mUzOhqcAEMNdpBhcLS
+@tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbDJAZW1haWwuY29tIiwiaWF0IjoxNzM3MTE1NTcxLCJleHAiOjE3MzcxMTkxNzF9.wdDtUxLRV4CFuTuPNqIXACCsnxDQ53uBdz4biyYXVswS2vMH284YA7v5wco9FCjY
+@tokenClient2 = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbDJAZW1haWwuY29tIiwiaWF0IjoxNzM3MTE1NTg0LCJleHAiOjE3MzcxMTkxODR9.3lCGf6jDvqH8ifKHF72br26ntNCJ7nAgG0f0k-5lCaa0lEW3jUsr0g-XupYvp7RK
+@tokenAdmin =eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM3MTE0Mjg1LCJleHAiOjE3MzcxMTc4ODV9.8olAUzw2L71Qv74ynyAliFa90goIEj9cJBKhwj6ax6WWubjlKg4KGoy5uH99tQAM
 
 GET http://localhost:8080/monitor/api/guardaTokens
 
@@ -80,7 +79,7 @@ Authorization: Bearer {{tokenAdmin}}
 ###  LOGS SENSORES
 GET http://localhost:8080/monitor/api/orders/1/volumes/1/sensors
 Content-Type: application/json
-Authorization: Bearer {{tokenClient2}}
+Authorization: Bearer {{tokenClient}}
 
 #######################################################################
 //PARA TESTES / OUTROS

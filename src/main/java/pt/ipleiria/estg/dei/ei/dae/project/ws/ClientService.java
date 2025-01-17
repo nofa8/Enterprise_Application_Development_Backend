@@ -4,9 +4,8 @@ package pt.ipleiria.estg.dei.ei.dae.project.ws;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.client.ClientRequestContext;
+import jakarta.ws.rs.core.*;
 import pt.ipleiria.estg.dei.ei.dae.project.dtos.ClientDTO;
 import pt.ipleiria.estg.dei.ei.dae.project.dtos.OrderDTO;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.ClientBean;
@@ -15,7 +14,6 @@ import pt.ipleiria.estg.dei.ei.dae.project.ejbs.OrderBean;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
 
 import pt.ipleiria.estg.dei.ei.dae.project.security.Authenticated;
-import jakarta.ws.rs.core.SecurityContext;
 
 import java.util.List;
 
@@ -50,14 +48,14 @@ public class ClientService {
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("{id}") // means: the relative url path is “/api/clients/”
     @Authenticated
-    @RolesAllowed({"Manager"})
-
     public Response getClient(@PathParam("id") Long id) throws MyEntityNotFoundException {
 
         var principal = securityContext.getUserPrincipal();
-        if(securityContext.isUserInRole("Manager")){ // || principal.getName().equals(clientDTO.getEmail())){
-            var client = clientBean.findWithOrders(id);
-            var clientDTO = ClientDTO.from(client);
+        var client = clientBean.findWithOrders(id);
+        var clientDTO = ClientDTO.from(client);
+
+
+        if(securityContext.isUserInRole("Manager") || principal.getName().equals(clientDTO.getEmail())){ //
             clientDTO.setOrdersDTO(OrderDTO.from(client.getOrders()));
             return Response.ok(clientDTO).build();
         }
