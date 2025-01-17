@@ -35,11 +35,11 @@ public class GlobalSensorsService {
     }
 
     @POST
-    @Path("/{id:sensorId}")
+    @Path("/{sensorId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response receiveSensorData(@PathParam("id:sensorId") Long sensorId,
-                                      String sensorDataNew) {
+    public Response receiveSensorData(@PathParam("sensorId") Long sensorId,
+                                      String value) {
         Sensor sensor = sensorBean.find(sensorId);
         if (sensor == null){
             return Response.status(Response.Status.BAD_REQUEST)
@@ -50,7 +50,7 @@ public class GlobalSensorsService {
             return Response.status(Response.Status.BAD_REQUEST)
                     .build();
         }
-        SensorDataDTO sensorDataDTO = new SensorDataDTO(sensorDataNew,sensorId);
+        SensorDataDTO sensorDataDTO = new SensorDataDTO(value,sensorId);
         try {
             sensorBean.createNewSingleValue(sensorDataDTO);
             return Response.ok().build();

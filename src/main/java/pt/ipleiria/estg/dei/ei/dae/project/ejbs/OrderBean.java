@@ -5,6 +5,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Client;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Volume;
@@ -53,6 +54,19 @@ public class OrderBean {
         var order = entityManager.find(Order.class,id);
         if (order == null) {
             throw new MyEntityNotFoundException("Order " + id + " not found");
+        }
+        return order;
+    }
+
+    public Order findWithVolumes(long id) throws  MyEntityNotFoundException {
+        var order = entityManager.find(Order.class,id);
+        if (order == null) {
+            throw new MyEntityNotFoundException("Order " + id + " not found");
+        }
+        Hibernate.initialize(order.getVolumes());
+        for (Volume vol : order.getVolumes()){
+            Hibernate.initialize(vol.getSensors());
+            Hibernate.initialize(vol.getProducts());
         }
         return order;
     }

@@ -78,7 +78,7 @@ public class OrderService {
     public Response getOrderBasedOnRole(@PathParam("code") long code) throws MyEntityNotFoundException {
         String username = securityContext.getUserPrincipal().getName();
         User user = userBean.findOrFail(username);
-        Order order = orderBean.find(code);
+        Order order = orderBean.findWithVolumes(code);
 
         if (securityContext.isUserInRole("Manager")) {
             return Response.ok(OrderManagerDTO.from(order)).build();
