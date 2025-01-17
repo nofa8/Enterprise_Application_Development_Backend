@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserDTO {
+    private Long id;
     private String name;
     private String email;
     private String role;
@@ -14,17 +15,27 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO( String email,String name, String role) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UserDTO(String email, String name, String role, Long id) {
         this.name = name;
         this.email = email;
         this.role = role;
+        this.id = id;
     }
 
     public static UserDTO from(User user) {
         return new UserDTO(
                 user.getEmail(),
                 user.getName(),
-                Hibernate.getClass(user).getSimpleName()
+                Hibernate.getClass(user).getSimpleName(),
+                user.getId()
         );
     }
 
