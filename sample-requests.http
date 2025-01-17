@@ -19,8 +19,8 @@ Accept: application/json
 { "email": "admin1@admin.com", "password": "password1" }
 
 ### Guardar os tokens nas variaveis (COPIAS OS TOKENS ANTERIORES PARA AQUI) - {nome do url randoom nao existe}
-@tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzY3MzQzODYsImV4cCI6MTczNjczNzk4Nn0.y6qMjoABVm5AN3DVyLNSgckEjAki-uQrrKX4EqJZxgpay6i9njhPrv4Iriay51Ld
-@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM2ODg3MjMyLCJleHAiOjE3MzY4OTA4MzJ9.GbBaJP6wwWnOTipNHPpLC-EOe6woInRFZigGUtzgimtzo20lQW0X_HeK9TLf5M9L
+@tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MzcwODQ4NTYsImV4cCI6MTczNzA4ODQ1Nn0.RG6dX_gRrXYU2rlYfyElTFCsuni-396CruQzskkkpb0ad2foKawkog6nGPcqHfjp
+@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM3MDg0ODY3LCJleHAiOjE3MzcwODg0Njd9.amLyh4XAtOJ56G1X13CB_7AB5a2ZMO-PhbDmsCrd3X6LZeYTKx7TelhaHZhrXEWR
 GET http://localhost:8080/monitor/api/guardaTokens
 
 #######################################################################
