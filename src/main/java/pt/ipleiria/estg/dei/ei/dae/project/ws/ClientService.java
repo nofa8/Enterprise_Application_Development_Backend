@@ -48,6 +48,7 @@ public class ClientService {
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("{id}") // means: the relative url path is “/api/clients/”
     @Authenticated
+    @RolesAllowed({"Manager", "Client"})
     public Response getClient(@PathParam("id") Long id) throws MyEntityNotFoundException {
 
         var principal = securityContext.getUserPrincipal();
