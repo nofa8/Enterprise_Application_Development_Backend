@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "volumes")
@@ -116,6 +117,15 @@ public class Volume extends Versionable {
     public @NotNull List<Sensor> getSensors() {
         return new ArrayList<>(sensors);
     }
+
+    public List<Sensor> getSensorsByType(String type) {
+        return sensors.stream()
+                .filter(sensor -> sensor.getType() != null &&
+                        sensor.getType().getName() != null &&
+                        type.equals(sensor.getType().getName()))
+                .collect(Collectors.toList()); // Compatível com Java 8+
+    }
+
 
     public @NotNull List<Product> getProducts() {
         return  new ArrayList<>(products);

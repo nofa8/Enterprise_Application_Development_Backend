@@ -79,38 +79,51 @@ public class SensorService {
     @Authenticated
     public Response getSensorHistory(
             @PathParam("code_order") Long codeOrder,
-            @PathParam("code_volume") Long codeVolume) {
+            @PathParam("code_volume") Long codeVolume,
+            @QueryParam("sensorType") String sensorType) {  // Parâmetro opcional para filtrar por tipo de sensor
 
         try {
-
-
             String username = securityContext.getUserPrincipal().getName();
             User user = userBean.findOrFail(username);
             Volume volume = volumeBean.find(codeVolume);
             Order order = volume.getOrder();
 
-            if (order.getCode() == codeOrder && (securityContext.isUserInRole("Manager") || ((securityContext.isUserInRole("Client")) && order.getClient().getEmail().equals(user.getEmail())))){
+            if (order.getCode() == codeOrder &&
+                    (securityContext.isUserInRole("Manager") ||
+                            (securityContext.isUserInRole("Client") && order.getClient().getEmail().equals(user.getEmail())))) {
 
-            // Verificar se o volume existe
-
+                // Verificar se o volume existe
                 volume = volumeBean.findWithSensors(codeVolume);
 
+                // Se sensorType for fornecido, filtrar os sensores por tipo
+                List<Sensor> sensors;
+                if (sensorType != null && !sensorType.isEmpty()) {
+                    // Filtrar os sensores pelo tipo, se o parâmetro sensorType for fornecido
+
+                    sensors = volume.getSensorsByType(sensorType);
+                } else {
+
+                    // Caso contrário, retornar todos os sensores
+                    sensors = volume.getSensors();
+                }
+                if (sensors.isEmpty()) {
+                    return Response.status(Response.Status.NOT_FOUND).build();}
 
                 // Converter o Sensor em SensorDTO
-                List<SensorDTO> sensorsDTO = SensorDTO.from(volume.getSensors());
+                List<SensorDTO> sensorsDTO = SensorDTO.from(sensors);
 
-
+                // Para cada SensorDTO, obter o histórico de valores e logs
                 for (SensorDTO sensorDTO : sensorsDTO) {
                     List<SensorValueHistory> sensorValueHistories = sensorBean.getSensorHistory(sensorDTO.getCode());
                     List<SensorLogDTO> log = SensorLogDTO.from(sensorValueHistories);
-                   sensorDTO.setLog(log);
+                    sensorDTO.setLog(log);
                 }
 
                 // Retornar a lista de SensorDTO como resposta
                 return Response.ok(sensorsDTO).build();
             }
-            return Response.status(Response.Status.BAD_REQUEST).build();
 
+            return Response.status(Response.Status.BAD_REQUEST).build();
 
         } catch (MyEntityNotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
@@ -122,7 +135,5 @@ public class SensorService {
                     .build();
         }
     }
-
-
 
 }
