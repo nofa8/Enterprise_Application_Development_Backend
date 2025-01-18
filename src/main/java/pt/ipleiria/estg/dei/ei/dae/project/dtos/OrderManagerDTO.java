@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.project.dtos;
 
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.OrderState;
 
@@ -117,7 +118,7 @@ public class OrderManagerDTO implements Serializable {
                 formattedPurchaseDate,
                 formattedLastUpdate
         );
-        //orderManagerDTO.setVolumes(VolumeDTO.from(order.getVolumes()));
+        orderManagerDTO.setVolumes(VolumeDTO.from(order.getVolumes()));
         return orderManagerDTO;
     }
 

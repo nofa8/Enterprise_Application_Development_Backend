@@ -1,10 +1,10 @@
 package pt.ipleiria.estg.dei.ei.dae.project.entities;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.ProductVolumeMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +15,17 @@ import java.util.Objects;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllProducts",
-                query = "SELECT p FROM Product p ORDER BY p.code" // IF needed order by something else
+                query = "SELECT p FROM Product p ORDER BY p.code"
         )
-    }
-)
+})
 public class Product extends Versionable {
 
     @Id
-    private long  code;
+    private long code;
+
     @NotBlank
     private String name;
+
     @NotBlank
     private String brand;
 
@@ -39,13 +40,8 @@ public class Product extends Versionable {
     @ManyToOne
     private ProductType type;
 
-    @ManyToMany
-    @JoinTable(
-            name = "product_volume",
-            joinColumns = @JoinColumn(name = "volume_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Volume> volumes;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductVolumeMapping> productVolumeMappings;
 
     public Product(long code, String name, String brand, float price, String description, ProductType type) {
         this.code = code;
@@ -54,40 +50,11 @@ public class Product extends Versionable {
         this.price = price;
         this.description = description;
         this.type = type;
-        volumes = new ArrayList<>();
+        this.productVolumeMappings = new ArrayList<>();
     }
 
     public Product() {
-        volumes = new ArrayList<>();
-    }
-
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public @NotBlank String getDescription() {
-        return description;
-    }
-
-    public void setDescription(@NotBlank String description) {
-        this.description = description;
-    }
-
-    public @NotNull ProductType getType() {
-        return type;
-    }
-
-    public void setType(@NotNull ProductType type) {
-        this.type = type;
-    }
-
-    public @NotNull List<Volume> getVolume() {
-        return new ArrayList<>(volumes);
+        this.productVolumeMappings = new ArrayList<>();
     }
 
     public long getCode() {
@@ -114,21 +81,66 @@ public class Product extends Versionable {
         this.brand = brand;
     }
 
-    public void addVolume(Volume volume) {
-        if ( volume == null || volumes.contains(volume)  ){
-            return;
-        }
-        volumes.add(volume);
-    }
-    public void removeVolume(Volume volume) {
-        if ( volume == null || !volumes.contains(volume)  ){
-            return;
-        }
-        volumes.remove(volume);
+    public float getPrice() {
+        return price;
     }
 
-    public List<Volume> getVolumes() {
-        return new ArrayList<>(volumes);
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public @NotBlank String getDescription() {
+        return description;
+    }
+
+    public void setDescription(@NotBlank String description) {
+        this.description = description;
+    }
+
+    public @NotNull ProductType getType() {
+        return type;
+    }
+
+    public void setType(@NotNull ProductType type) {
+        this.type = type;
+    }
+
+    public List<ProductVolumeMapping> getProductVolumeMappings() {
+        return new ArrayList<>(productVolumeMappings);
+    }
+
+    public void addProductVolumeMapping(ProductVolumeMapping productVolumeMapping) {
+        if (productVolumeMapping == null || productVolumeMappings.contains(productVolumeMapping)) {
+            return;
+        }
+        productVolumeMappings.add(productVolumeMapping);
+    }
+
+    public void removeProductVolumeMapping(ProductVolumeMapping productVolumeMapping) {
+        if (productVolumeMapping == null || !productVolumeMappings.contains(productVolumeMapping)) {
+            return;
+        }
+        productVolumeMappings.remove(productVolumeMapping);
+    }
+
+    public long getAmount(Volume volume) {
+        if (volume == null) {
+            throw new IllegalArgumentException("Volume cannot be null");
+        }
+        return productVolumeMappings.stream()
+                .filter(mapping -> mapping.getVolume().equals(volume))
+                .mapToLong(ProductVolumeMapping::getAmount)
+                .findFirst()
+                .orElse(0L);
+    }
+    public void addVolumeMapping(ProductVolumeMapping mapping) {
+        productVolumeMappings.add(mapping); // Add to the collection
+        mapping.getVolume().getProducts().add(mapping); // Maintain bidirectional consistency
+    }
+
+    public void removeVolumeMapping(ProductVolumeMapping mapping) {
+        this.productVolumeMappings.remove(mapping);
+        mapping.getVolume().getProducts().remove(mapping);
     }
 
     @Override
@@ -138,10 +150,18 @@ public class Product extends Versionable {
 
     @Override
     public boolean equals(Object obj) {
-        return this.getCode() == ((Product)obj).getCode();
+        return obj instanceof Product && this.getCode() == ((Product) obj).getCode();
     }
 
-    public int getAmount() {
-        return 0;
+    @Override
+    public String toString() {
+        return "Product{" +
+                "code=" + code +
+                ", name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", type=" + type +
+                '}';
     }
 }

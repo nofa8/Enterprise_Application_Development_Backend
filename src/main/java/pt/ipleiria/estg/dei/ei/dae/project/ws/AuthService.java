@@ -34,7 +34,7 @@ public class AuthService {
             String token = issuer.issue(auth.getEmail());
             return Response.ok(token).build();
         }
-        return Response.status(Response.Status.UNAUTHORIZED).build();
+        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 
     @GET

@@ -25,7 +25,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
-      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/volumes" />
+      <object connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" object-ref="schemas/public/tables/product_volume_mapping" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
@@ -44,6 +44,7 @@
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.sensor_types" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.package_sensor_mapping" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.packagetypes" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.product_volume_mapping" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="288f64f5-cf88-4605-b73d-a7aa0d8286cd" dataset="public.product_volume" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.ExecutionManager">

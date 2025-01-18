@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.dae.project.dtos;
 
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Product;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.ProductVolumeMapping;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,15 +41,15 @@ public class PostVolumeProductDTO implements Serializable {
     }
 
     // Static method to convert a Product entity to ProductDTO
-    public static PostVolumeProductDTO from(Product product) {
+    public static PostVolumeProductDTO from(ProductVolumeMapping product) {
         return new PostVolumeProductDTO(
-                product.getCode(),
+                product.getProduct().getCode(),
                 product.getAmount()
         );
     }
 
     // Static method to convert a list of Product entities to a list of ProductDTOs
-    public static List<PostVolumeProductDTO> from(List<Product> products) {
+    public static List<PostVolumeProductDTO> from(List<ProductVolumeMapping> products) {
         return products.stream().map(PostVolumeProductDTO::from).collect(Collectors.toList());
     }
 }

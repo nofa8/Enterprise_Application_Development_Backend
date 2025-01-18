@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.ei.dae.project.dtos;
 
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Sensor;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.SensorsType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,14 +11,23 @@ import java.util.stream.Collectors;
 public class SimpleSensorDTO {
 
     private long code;
+    private String typecode;
 
     // Constructor
-    public SimpleSensorDTO(long code) {
+    public SimpleSensorDTO(long code, String type) {
         this.code = code;
-
+        this.typecode = type;
     }
 
     public SimpleSensorDTO() {
+    }
+
+    public String getType() {
+        return typecode;
+    }
+
+    public void setType(String type) {
+        this.typecode = type;
     }
 
     // Getters and Setters
@@ -34,7 +44,8 @@ public class SimpleSensorDTO {
     public static SimpleSensorDTO from(Sensor sensor) {
 
         return new SimpleSensorDTO(
-                sensor.getCode()
+                sensor.getCode(),
+                sensor.getType().getName()
         );
     }
 

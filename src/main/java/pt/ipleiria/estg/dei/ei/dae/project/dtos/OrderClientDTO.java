@@ -107,7 +107,7 @@ public class OrderClientDTO implements Serializable {
                 formattedPurchaseDate,
                 formattedLastUpdate
         );
-        //orderClientDTO.setVolumes(VolumeDTO.from(order.getVolumes()));
+        orderClientDTO.setVolumes(VolumeDTO.from(order.getVolumes()));
         return orderClientDTO;
     }
 

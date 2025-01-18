@@ -7,6 +7,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.client.ClientRequestContext;
 import jakarta.ws.rs.core.*;
 import pt.ipleiria.estg.dei.ei.dae.project.dtos.ClientDTO;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.ClientNoDTO;
 import pt.ipleiria.estg.dei.ei.dae.project.dtos.OrderDTO;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.ClientBean;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.OrderBean;
@@ -36,18 +37,19 @@ public class ClientService {
     @Path("/") // means: the relative url path is “/api/clients/”
     @Authenticated
     @RolesAllowed({"Manager"})
-    public List<ClientDTO> getAllClients() {
+    public List<ClientNoDTO> getAllClients() {
         var principal = securityContext.getUserPrincipal();
 
         System.out.println("Authenticated User (principal.getName()): " + principal.getName());
 
-        return ClientDTO.from(clientBean.findAll());
+        return ClientNoDTO.from(clientBean.findAll());
     }
 
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
     @Path("{id}") // means: the relative url path is “/api/clients/”
     @Authenticated
+    @RolesAllowed({"Manager", "Client"})
     public Response getClient(@PathParam("id") Long id) throws MyEntityNotFoundException {
 
         var principal = securityContext.getUserPrincipal();

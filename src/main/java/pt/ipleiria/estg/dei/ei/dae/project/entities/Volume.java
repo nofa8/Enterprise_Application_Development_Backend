@@ -4,12 +4,16 @@ package pt.ipleiria.estg.dei.ei.dae.project.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.ProductVolumeMapping;
 
+//ups
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+//ups
+import java.util.*;
 
 @Entity
 @Table(name = "volumes")
@@ -44,8 +48,9 @@ public class Volume extends Versionable {
     @OneToMany(mappedBy = "volume")
     private List<Sensor> sensors;
 
-    @ManyToMany(mappedBy = "volumes")
-    private List<Product> products;
+
+    @OneToMany(mappedBy = "volume", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductVolumeMapping> products;
 
 
     public Volume(long code, VolumeState state, PackageType typePackage, Order order, Date timestamp) {
@@ -63,22 +68,52 @@ public class Volume extends Versionable {
         products = new ArrayList<>();
     }
 
-
-    public void addProduct(Product product) {
-        if ( product == null || products.contains(product)  ){
+    public void addProduct(Product product, int quantity) {
+        if (product == null) {
             return;
         }
 
-        products.add(product);
+        // Check if the product is already associated with this sensor
+        boolean exists = products.stream()
+                .anyMatch(mapping -> mapping.getProduct().equals(product));
+
+        if (exists) {
+            return;
+        }
+
+        // Add new mapping
+        ProductVolumeMapping mapping = new ProductVolumeMapping(product, this, quantity);
+        products.add(mapping);
+    }
+
+    public void updateProductQuantity(Product product, int quantity) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+
+        // Find the mapping for the specified product
+        ProductVolumeMapping mapping = products.stream()
+                .filter(m -> m.getProduct().equals(product))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Product is not associated with this volume."));
+
+        // Update the quantity
+        mapping.setAmount(quantity);
     }
 
     public void removeProduct(Product product) {
-
-        if ( product == null || !products.contains(product)  ){
+        if (product == null) {
             return;
         }
 
-        products.remove(product);
+        // Find the mapping for the specified product
+        ProductVolumeMapping mapping = products.stream()
+                .filter(m -> m.getProduct().equals(product))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Product is not associated with this sensor."));
+
+        // Remove the mapping
+        products.remove(mapping);
     }
 
     public void addSensor(Sensor sensor) {
@@ -97,6 +132,19 @@ public class Volume extends Versionable {
 
         sensors.remove(sensor);
     }
+
+    public void addProductMapping(ProductVolumeMapping mapping) {
+        products.add(mapping);
+        mapping.getProduct().getProductVolumeMappings().add(mapping);
+    }
+
+    public void removeProductMapping(ProductVolumeMapping mapping) {
+        this.products.remove(mapping);
+        mapping.getProduct().getProductVolumeMappings().remove(mapping);
+    }
+
+
+
 
     public @NotNull Date getTimestamp() {
         return timestamp;
@@ -118,6 +166,7 @@ public class Volume extends Versionable {
         return new ArrayList<>(sensors);
     }
 
+//eu usei isto
     public List<Sensor> getSensorsByType(String type) {
         return sensors.stream()
                 .filter(sensor -> sensor.getType() != null &&
@@ -129,6 +178,9 @@ public class Volume extends Versionable {
 
     public @NotNull List<Product> getProducts() {
         return  new ArrayList<>(products);
+//e o rafa isto
+    public @NotNull List<ProductVolumeMapping> getProducts() {
+        return Collections.unmodifiableList(products);
     }
 
     public @NotNull Order getOrder() {

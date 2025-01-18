@@ -6,6 +6,7 @@ import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.OrderState;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
+import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.ProductVolumeMapping;
 
 import java.time.Instant;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
 @Startup
 public class ConfigBean {
 
-    private static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
+    public static final Logger logger = Logger.getLogger("ejbs.ConfigBean");
     @EJB
     private ClientBean clientBean;
 
@@ -41,6 +42,9 @@ public class ConfigBean {
     @EJB
     private LogisticBean logisticBean;
 
+    @EJB
+    private ProductVolumeMappingBean productVolumeMapping;
+
     @PostConstruct
     public void populateDB() {
         try {
@@ -57,19 +61,19 @@ public class ConfigBean {
             clientBean.create("email9@email.com", "nove", "nove");
 
             // Existing Managers
-            managerBean.create("admin1@admin.com", "password1", "name1");
-            managerBean.create("admin2@admin.com", "password2", "name2");
-            managerBean.create("admin3@admin.com", "password3", "name3");
-            managerBean.create("admin4@admin.com", "password4", "name4");
-            managerBean.create("admin5@admin.com", "password5", "name5");
-            managerBean.create("admin6@admin.com", "password6", "name6");
-            managerBean.create("admin7@admin.com", "password7", "name7");
-            managerBean.create("admin8@admin.com", "password8", "name8");
+            managerBean.create("admin1@admin.com", "password1", "admin1");
+            managerBean.create("admin2@admin.com", "password2", "admin2");
+            managerBean.create("admin3@admin.com", "password3", "admin3");
+            managerBean.create("admin4@admin.com", "password4", "admin4");
+            managerBean.create("admin5@admin.com", "password5", "admin5");
+            managerBean.create("admin6@admin.com", "password6", "admin6");
+            managerBean.create("admin7@admin.com", "password7", "admin7");
+            managerBean.create("admin8@admin.com", "password8", "admin8");
 
             // Existing Logistics
-            logisticBean.create("logistic1@logistic.com", "password1", "name1");
-            logisticBean.create("logistic2@logistic.com", "password2", "name2");
-            logisticBean.create("logistic3@logistic.com", "password3", "name3");
+            logisticBean.create("logistic1@logistic.com", "password1", "logistic1");
+            logisticBean.create("logistic2@logistic.com", "password2", "logistic");
+            logisticBean.create("logistic3@logistic.com", "password3", "logistic3");
 
 
             // Existing Sensor Types
@@ -127,7 +131,7 @@ public class ConfigBean {
             sensorBean.create(1, 1, "20", Date.from(Instant.now()), 1);
             sensorBean.create(2, 2, "30", Date.from(Instant.now()), 2);
             sensorBean.create(3, 3, "40", Date.from(Instant.now()), 3);
-            sensorBean.create(4, 4, "50", Date.from(Instant.now()), 4);
+            sensorBean.create(4, 4, "39.908889, -8.821111", Date.from(Instant.now()), 4);
             sensorBean.create(5, 5, "60", Date.from(Instant.now()), 5);
 
             // Existing Products
@@ -138,9 +142,9 @@ public class ConfigBean {
             productBean.create(115, "Quinto", "Honda", 5, "SUV", 5);
 
             // Add Products to Volumes
-            volumeBean.addProductToVolume(1, 111);
-            volumeBean.addProductToVolume(2, 112);
-            volumeBean.addProductToVolume(3, 113);
+            productVolumeMapping.create(111, 1,1);
+            productVolumeMapping.create(112, 2,1);
+            productVolumeMapping.create(113, 3,1);
 
         } catch (Exception e) {
             logger.severe("Config Bean: "+e.getMessage());

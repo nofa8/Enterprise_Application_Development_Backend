@@ -42,7 +42,6 @@ public class OrderService {
     @EJB
     private OrderBean orderBean;
 
-
     @Context
     private SecurityContext securityContext;
 
@@ -78,7 +77,7 @@ public class OrderService {
     public Response getOrderBasedOnRole(@PathParam("code") long code) throws MyEntityNotFoundException {
         String username = securityContext.getUserPrincipal().getName();
         User user = userBean.findOrFail(username);
-        Order order = orderBean.find(code);
+        Order order = orderBean.findWithVolumes(code);
 
         if (securityContext.isUserInRole("Manager")) {
             return Response.ok(OrderManagerDTO.from(order)).build();
@@ -102,14 +101,14 @@ public class OrderService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Authenticated
-    public Response createNewOrder (OrderDTO orderDTO) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
+    public Response createNewOrder (PostOrderRequestDTO orderDTO) throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
         orderBean.create(
                 orderDTO.getCode(),
                 orderDTO.getPrice(),
                 orderDTO.getState(),
                 orderDTO.getPurchaseDate(),
                 Date.from(Instant.now()),
-                orderDTO.getClientId()
+                orderDTO.getClientCode()
         );
 
         Order newOrder = orderBean.find(orderDTO.getCode());

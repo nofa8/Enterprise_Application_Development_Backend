@@ -6,10 +6,7 @@ import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.ClientDTO;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.SensorDTO;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.SensorDataDTO;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.SimpleSensorDTO;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.*;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.SensorBean;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Volume;
@@ -29,17 +26,35 @@ public class GlobalSensorsService {
     private SensorBean sensorBean;
 
     @GET // means: to call this endpoint, we need to use the HTTP GET method
-    @Path("/") // means: the relative url path is “/api/clients/”
+    @Path("/")
     public List<SimpleSensorDTO> getAllSensors() {
         return SimpleSensorDTO.from(sensorBean.findAll());
     }
 
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/{id}") // means: the relative url path is “/api/clients/”
+    @Authenticated
+    @RolesAllowed("Manager")
+    public SensorDTO getSensor(@PathParam("id") Long sensorId) {
+        return SensorDTO.from(sensorBean.find(sensorId));
+    }
+
+    //List<SensorValueHistory> sensorValueHistories = sensorBean.getSensorHistory(sensorDTO.getCode());
+    //                    List<SensorLogDTO> log = SensorLogDTO.from(sensorValueHistories);
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/{id}/log") // means: the relative url path is “/api/clients/”
+    public List<SensorLogDTO> getSensorHistory(@PathParam("id") Long sensorLogId) {
+        return SensorLogDTO.from(sensorBean.getSensorHistory(sensorLogId));
+    }
+
+
     @POST
-    @Path("/{id:sensorId}")
+    @Path("/{sensorId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response receiveSensorData(@PathParam("id:sensorId") Long sensorId,
-                                      String sensorDataNew) {
+    public Response receiveSensorData(@PathParam("sensorId") Long sensorId,
+                                      String value) {
         Sensor sensor = sensorBean.find(sensorId);
         if (sensor == null){
             return Response.status(Response.Status.BAD_REQUEST)
@@ -50,12 +65,12 @@ public class GlobalSensorsService {
             return Response.status(Response.Status.BAD_REQUEST)
                     .build();
         }
-        SensorDataDTO sensorDataDTO = new SensorDataDTO(sensorDataNew,sensorId);
+        SensorDataDTO sensorDataDTO = new SensorDataDTO(value,sensorId);
         try {
             sensorBean.createNewSingleValue(sensorDataDTO);
             return Response.ok().build();
         } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return Response.status(400,sensorBean.find(sensorDataDTO.getCode()).getType().getName())
                     .build();
         }
     }
