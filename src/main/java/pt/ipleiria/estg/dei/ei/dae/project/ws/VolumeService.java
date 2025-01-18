@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import pt.ipleiria.estg.dei.ei.dae.project.dtos.*;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.ClientBean;
+import pt.ipleiria.estg.dei.ei.dae.project.ejbs.OrderBean;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.UserBean;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.VolumeBean;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Order;
@@ -37,6 +38,8 @@ public class VolumeService {
     private ClientBean clientBean;
     @EJB
     private UserBean userBean;
+    @EJB
+    private OrderBean orderBean;
 
     @Context
     private SecurityContext securityContext;
@@ -68,6 +71,15 @@ public class VolumeService {
                                  @PathParam("code_volume") Long volumeId,
                                  VolumeState state)
             throws MyEntityNotFoundException, MyConstraintViolationException {
+        Order order = orderBean.findWithVolumes(orderId);
+        if (order == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        Volume volume = volumeBean.find(volumeId);
+
+        if(!order.getVolumes().contains(volume)){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
         volumeBean.patchState(volumeId,state);
         return Response.ok().build();
     }

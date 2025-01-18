@@ -13,7 +13,6 @@ public class OrdersClientDTO implements Serializable {
 
     private long code;
     private float price;
-    private ClientDTO client;  // Updated to use ClientDTO
     private OrderState state;
     private String purchaseDate;  // Updated to String to match the desired format
     private String lastUpdate;    // Updated to String to match the desired format
