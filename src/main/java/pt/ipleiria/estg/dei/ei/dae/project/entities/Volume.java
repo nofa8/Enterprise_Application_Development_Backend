@@ -6,6 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.enums.VolumeState;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.mappings.ProductVolumeMapping;
 
+//ups
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+//ups
 import java.util.*;
 
 @Entity
@@ -159,6 +166,19 @@ public class Volume extends Versionable {
         return new ArrayList<>(sensors);
     }
 
+//eu usei isto
+    public List<Sensor> getSensorsByType(String type) {
+        return sensors.stream()
+                .filter(sensor -> sensor.getType() != null &&
+                        sensor.getType().getName() != null &&
+                        type.equals(sensor.getType().getName()))
+                .collect(Collectors.toList()); // Compatível com Java 8+
+    }
+
+
+    public @NotNull List<Product> getProducts() {
+        return  new ArrayList<>(products);
+//e o rafa isto
     public @NotNull List<ProductVolumeMapping> getProducts() {
         return Collections.unmodifiableList(products);
     }

@@ -30,7 +30,7 @@ Accept: application/json
 ### Guardar os tokens nas variaveis (COPIAS OS TOKENS ANTERIORES PARA AQUI) - {nome do url randoom nao existe}
 @tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbDJAZW1haWwuY29tIiwiaWF0IjoxNzM3MTE1NTcxLCJleHAiOjE3MzcxMTkxNzF9.wdDtUxLRV4CFuTuPNqIXACCsnxDQ53uBdz4biyYXVswS2vMH284YA7v5wco9FCjY
 @tokenClient2 = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbDJAZW1haWwuY29tIiwiaWF0IjoxNzM3MTE1NTg0LCJleHAiOjE3MzcxMTkxODR9.3lCGf6jDvqH8ifKHF72br26ntNCJ7nAgG0f0k-5lCaa0lEW3jUsr0g-XupYvp7RK
-@tokenAdmin =eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM3MTE0Mjg1LCJleHAiOjE3MzcxMTc4ODV9.8olAUzw2L71Qv74ynyAliFa90goIEj9cJBKhwj6ax6WWubjlKg4KGoy5uH99tQAM
+@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM3MTQyNjM1LCJleHAiOjE3MzcxNDYyMzV9.s_n7n_zn71Fcqtokvqh1NKBacakdgI0alEGH-SMyMO3PFnE_K7Q4RJYBtzPrfmHq
 
 GET http://localhost:8080/monitor/api/guardaTokens
 
@@ -58,7 +58,7 @@ Accept: application/json
 ### 7 GET ORDER de um cliente - SAC (ainda falta colocar os volumes bem)
 GET http://localhost:8080/monitor/api/orders/1
 Content-Type: application/json
-Authorization: Bearer {{tokenClient}}
+Authorization: Bearer {{tokenAdmin}}
 
 ### 8 VOLUME ESPECIFICO
 GET http://localhost:8080/monitor/api/orders/1/volumes/1
@@ -79,7 +79,12 @@ Authorization: Bearer {{tokenAdmin}}
 ###  LOGS SENSORES
 GET http://localhost:8080/monitor/api/orders/1/volumes/1/sensors
 Content-Type: application/json
-Authorization: Bearer {{tokenClient}}
+Authorization: Bearer {{tokenAdmin}}
+
+###  LOGS SENSORES
+GET http://localhost:8080/monitor/api/orders/1/volumes/1/sensors?sensorType=Temperature Sensor
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
 
 #######################################################################
 //PARA TESTES / OUTROS
@@ -90,10 +95,6 @@ GET http://localhost:8080/monitor/api/clients
 Content-Type: application/json
 Authorization: Bearer {{tokenAdmin}}
 
-
-
-
-
 ### TODOS volume
-GET http://localhost:8080/monitor/api/orders/1/volumes/1
+GET http://localhost:8080/monitor/api/orders/1/volumes/1/
 Authorization: Bearer {{tokenAdmin}}
