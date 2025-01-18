@@ -195,7 +195,7 @@ public class VolumeBean {
 
         // Validate that the sensor quantities match the required quantities
         if (!requiredSensorQuantities.equals(sensorTypeCounts)) {
-            throw new IllegalArgumentException("The number of sensors does not correspond to the required quantities given the package and product types");
+            throw new MyEntityNotFoundException("The number of sensors does not correspond to the required quantities given the package and product types");
         }
 
         return sensors;
