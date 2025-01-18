@@ -9,11 +9,20 @@ import java.util.stream.Collectors;
 public class SimpleSensorTypeDTO {
 
     private long code;
+    private String name;
 
     // Constructor
-    public SimpleSensorTypeDTO(long code) {
+    public SimpleSensorTypeDTO(long code, String name) {
         this.code = code;
+        this.name = name;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public SimpleSensorTypeDTO() {
@@ -33,7 +42,8 @@ public class SimpleSensorTypeDTO {
     public static SimpleSensorTypeDTO from(SensorsType sensor) {
 
         return new SimpleSensorTypeDTO(
-                sensor.getId()
+                sensor.getId(),
+                sensor.getName()
         );
     }
 

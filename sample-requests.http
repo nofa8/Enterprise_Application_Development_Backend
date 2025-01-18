@@ -30,7 +30,7 @@ Accept: application/json
 ### Guardar os tokens nas variaveis (COPIAS OS TOKENS ANTERIORES PARA AQUI) - {nome do url randoom nao existe}
 @tokenClient = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbDJAZW1haWwuY29tIiwiaWF0IjoxNzM3MTE1NTcxLCJleHAiOjE3MzcxMTkxNzF9.wdDtUxLRV4CFuTuPNqIXACCsnxDQ53uBdz4biyYXVswS2vMH284YA7v5wco9FCjY
 @tokenClient2 = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbWFpbDJAZW1haWwuY29tIiwiaWF0IjoxNzM3MTE1NTg0LCJleHAiOjE3MzcxMTkxODR9.3lCGf6jDvqH8ifKHF72br26ntNCJ7nAgG0f0k-5lCaa0lEW3jUsr0g-XupYvp7RK
-@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM3MTQyNjM1LCJleHAiOjE3MzcxNDYyMzV9.s_n7n_zn71Fcqtokvqh1NKBacakdgI0alEGH-SMyMO3PFnE_K7Q4RJYBtzPrfmHq
+@tokenAdmin = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjFAYWRtaW4uY29tIiwiaWF0IjoxNzM3MjEyMjI3LCJleHAiOjE3MzcyMTU4Mjd9.mhI4fQclSecxjMSFDD2lCUrHJEze3IDhZct_9DdTlZN8K2Bz-giBzP5pcX2J_y9g
 
 GET http://localhost:8080/monitor/api/guardaTokens
 
@@ -51,8 +51,8 @@ Content-Type: application/json
 Accept: application/json
 
 [{
-"code": 1,
-"value": "3"
+"code": 4,
+"value": "39.908889, -8.821111"
 }]
 
 ### 7 GET ORDER de um cliente - SAC (ainda falta colocar os volumes bem)
@@ -95,6 +95,35 @@ GET http://localhost:8080/monitor/api/clients
 Content-Type: application/json
 Authorization: Bearer {{tokenAdmin}}
 
+
+
+### TODOS LOGS SENSORES
+GET http://localhost:8080/monitor/api/orders/1/volumes/1/sensors?sensorType=Temperature%20Sensor
+Authorization: Bearer {{tokenAdmin}}
+
 ### TODOS volume
 GET http://localhost:8080/monitor/api/orders/1/volumes/1/
 Authorization: Bearer {{tokenAdmin}}
+
+
+### All Sensors
+GET http://localhost:8080/monitor/api/sensors
+
+### All Sensors
+GET http://localhost:8080/monitor/api/sensors/2
+Authorization: Bearer {{tokenAdmin}}
+
+### sensor history
+GET http://localhost:8080/monitor/api/sensors/1/log
+Authorization: Bearer {{tokenAdmin}}
+
+### 5 -> POST VALOR SENSOR
+POST  http://localhost:8080/monitor/api/sensors/1
+Content-Type: application/json
+
+{
+  "value": "25"
+}
+
+### sensor history
+GET http://localhost:8080/monitor/api/sensor-types
