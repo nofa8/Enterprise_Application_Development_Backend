@@ -53,10 +53,10 @@ public class VolumeBean {
         // remember, maps to: “SELECT s FROM Student s ORDER BY s.name”
         return entityManager.createNamedQuery("getAllVolumes", Volume.class).getResultList();
     }
-    public Volume find(long id) {
+    public Volume find(long id) throws  MyEntityNotFoundException{
         var volume = entityManager.find(Volume.class,id);
         if (volume == null) {
-            throw new RuntimeException("Volume " + id + " not found");
+            throw new MyEntityNotFoundException("Volume " + id + " not found");
         }
         return volume;
     }
@@ -176,7 +176,7 @@ public class VolumeBean {
     }
 
     private List<Sensor> fetchAndValidateSensors(PostVolumeDTO volumeDTO, Map<Long, Integer> requiredSensorQuantities, Date timestamp)
-            throws MyEntityNotFoundException {
+            throws MyEntityNotFoundException, IllegalArgumentException {
         List<Sensor> sensors = new ArrayList<>();
         Map<Long, Integer> sensorTypeCounts = new HashMap<>();
 
@@ -192,9 +192,10 @@ public class VolumeBean {
             sensors.add(new Sensor(sensorDTO.getCode(), sensorsType, "", timestamp, null));
         }
 
+
         // Validate that the sensor quantities match the required quantities
         if (!requiredSensorQuantities.equals(sensorTypeCounts)) {
-            throw new IllegalStateException("The number of sensors does not correspond to the required quantities given the package and product types");
+            throw new IllegalArgumentException("The number of sensors does not correspond to the required quantities given the package and product types");
         }
 
         return sensors;
