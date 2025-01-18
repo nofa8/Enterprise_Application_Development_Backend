@@ -147,6 +147,8 @@ public class VolumeBean {
             }
         } catch (ConstraintViolationException e) {
             throw new MyConstraintViolationException(e);
+        }catch (IllegalStateException e){
+            throw new IllegalStateException(e);
         }
     }
 

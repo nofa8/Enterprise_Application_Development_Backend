@@ -172,13 +172,11 @@ public class Volume extends Versionable {
                 .filter(sensor -> sensor.getType() != null &&
                         sensor.getType().getName() != null &&
                         type.equals(sensor.getType().getName()))
-                .collect(Collectors.toList()); // Compatível com Java 8+
+                .collect(Collectors.toList());
     }
 
 
-    public @NotNull List<Product> getProducts() {
-        return  new ArrayList<>(products);
-//e o rafa isto
+
     public @NotNull List<ProductVolumeMapping> getProducts() {
         return Collections.unmodifiableList(products);
     }

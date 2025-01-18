@@ -48,6 +48,11 @@ public class VolumeService {
                                   List<PostVolumeDTO> volumeDTOs)
             throws MyEntityNotFoundException, MyConstraintViolationException, MyEntityExistsException {
         try{
+            for (PostVolumeDTO vol: volumeDTOs){
+                if (vol.getProducts().isEmpty() || vol.getSensors().isEmpty()){
+                    return Response.status(Response.Status.BAD_REQUEST).build();
+                }
+            }
             volumeBean.createVolumes(orderId, volumeDTOs);
             return Response.status(Response.Status.CREATED).build();
 
@@ -57,10 +62,10 @@ public class VolumeService {
     }
 
     @PATCH
-    @Path("/{id:code_order}/volumes/{id:code_volume}")
+    @Path("/{code_volume}")
     @Authenticated
-    public Response patchVolume(@PathParam("id:code_order") Long orderId,
-                                 @PathParam("id:code_volume") Long volumeId,
+    public Response patchVolume(@PathParam("code_order") Long orderId,
+                                 @PathParam("code_volume") Long volumeId,
                                  VolumeState state)
             throws MyEntityNotFoundException, MyConstraintViolationException {
         volumeBean.patchState(volumeId,state);
