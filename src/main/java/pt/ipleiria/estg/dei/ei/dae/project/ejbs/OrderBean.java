@@ -36,7 +36,7 @@ public class OrderBean {
 
         Client client = entityManager.find(Client.class, clientId);
         if (client == null) {
-            throw new MyEntityNotFoundException("Client with email " + clientId + " not found");
+            throw new MyEntityNotFoundException("No Client with code " + clientId + " has been found");
         }
         try {
             var order = new Order(code, price, state, purchaseDate, timestamp, client);
