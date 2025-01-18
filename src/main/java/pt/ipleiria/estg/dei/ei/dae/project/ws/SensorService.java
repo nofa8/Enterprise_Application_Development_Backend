@@ -98,28 +98,23 @@ public class SensorService {
                 // Se sensorType for fornecido, filtrar os sensores por tipo
                 List<Sensor> sensors;
                 if (sensorType != null && !sensorType.isEmpty()) {
-                    // Filtrar os sensores pelo tipo, se o parâmetro sensorType for fornecido
 
                     sensors = volume.getSensorsByType(sensorType);
                 } else {
 
-                    // Caso contrário, retornar todos os sensores
                     sensors = volume.getSensors();
                 }
                 if (sensors.isEmpty()) {
                     return Response.status(Response.Status.NOT_FOUND).build();}
 
-                // Converter o Sensor em SensorDTO
                 List<SensorDTO> sensorsDTO = SensorDTO.from(sensors);
 
-                // Para cada SensorDTO, obter o histórico de valores e logs
                 for (SensorDTO sensorDTO : sensorsDTO) {
                     List<SensorValueHistory> sensorValueHistories = sensorBean.getSensorHistory(sensorDTO.getCode());
                     List<SensorLogDTO> log = SensorLogDTO.from(sensorValueHistories);
                     sensorDTO.setLog(log);
                 }
 
-                // Retornar a lista de SensorDTO como resposta
                 return Response.ok(sensorsDTO).build();
             }
 

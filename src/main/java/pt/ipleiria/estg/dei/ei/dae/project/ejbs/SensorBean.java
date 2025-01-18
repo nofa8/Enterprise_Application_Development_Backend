@@ -151,21 +151,6 @@ public class SensorBean {
                     double humidity = Double.parseDouble(value);
                     return humidity >= 0 && humidity <= 100; // Example range in %
 
-                case "Light Sensor":
-                    // Expecting a numeric value for light intensity
-                    double light = Double.parseDouble(value);
-                    return light >= 0 && light <= 100000; // Example range in lux
-
-                case "Infrared Sensor":
-                    // Expecting a numeric value for infrared
-                    double infrared = Double.parseDouble(value);
-                    return infrared >= 0 && infrared <= 10000; // Example range in arbitrary units
-
-                case "Ultrasonic Sensor":
-                    // Expecting a numeric value for distance
-                    double ultrasonic = Double.parseDouble(value);
-                    return ultrasonic >= 0 && ultrasonic <= 400; // Example range in cm
-
                 default:
                     throw new IllegalArgumentException("Unknown sensor type: " + typename);
             }
