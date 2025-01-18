@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ClientInfoInOrderDTO implements Serializable {
+    private long code;
 
-    @Id
     private String email;
 
     private String name;
 
-    public ClientInfoInOrderDTO( String email, String name) {
-
+    public ClientInfoInOrderDTO(long code, String email, String name) {
+        this.code = code;
         this.name = name;
         this.email = email;
 
@@ -27,6 +27,13 @@ public class ClientInfoInOrderDTO implements Serializable {
 
     }
 
+    public long getCode() {
+        return code;
+    }
+
+    public void setCode(long code) {
+        this.code = code;
+    }
 
     public String getName() {
         return name;
@@ -46,6 +53,7 @@ public class ClientInfoInOrderDTO implements Serializable {
 
     public static ClientInfoInOrderDTO from(Client client) {
         return new ClientInfoInOrderDTO(
+                client.getId(),
                 client.getEmail(),
                 client.getName()
         );
