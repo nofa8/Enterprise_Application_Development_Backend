@@ -61,19 +61,19 @@ public class ConfigBean {
             clientBean.create("email9@email.com", "nove", "nove");
 
             // Existing Managers
-            managerBean.create("admin1@admin.com", "password1", "name1");
-            managerBean.create("admin2@admin.com", "password2", "name2");
-            managerBean.create("admin3@admin.com", "password3", "name3");
-            managerBean.create("admin4@admin.com", "password4", "name4");
-            managerBean.create("admin5@admin.com", "password5", "name5");
-            managerBean.create("admin6@admin.com", "password6", "name6");
-            managerBean.create("admin7@admin.com", "password7", "name7");
-            managerBean.create("admin8@admin.com", "password8", "name8");
+            managerBean.create("admin1@admin.com", "password1", "admin1");
+            managerBean.create("admin2@admin.com", "password2", "admin2");
+            managerBean.create("admin3@admin.com", "password3", "admin3");
+            managerBean.create("admin4@admin.com", "password4", "admin4");
+            managerBean.create("admin5@admin.com", "password5", "admin5");
+            managerBean.create("admin6@admin.com", "password6", "admin6");
+            managerBean.create("admin7@admin.com", "password7", "admin7");
+            managerBean.create("admin8@admin.com", "password8", "admin8");
 
             // Existing Logistics
-            logisticBean.create("logistic1@logistic.com", "password1", "name1");
-            logisticBean.create("logistic2@logistic.com", "password2", "name2");
-            logisticBean.create("logistic3@logistic.com", "password3", "name3");
+            logisticBean.create("logistic1@logistic.com", "password1", "logistic1");
+            logisticBean.create("logistic2@logistic.com", "password2", "logistic");
+            logisticBean.create("logistic3@logistic.com", "password3", "logistic3");
 
 
             // Existing Sensor Types
