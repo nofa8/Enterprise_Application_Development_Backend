@@ -101,6 +101,8 @@ public class ConfigBean {
             packageTypeBean.create(8, "Cardboard Box");
             packageTypeBean.create(9, "Plastic Container");
             packageTypeBean.create(10, "Foam Box");
+            packageTypeBean.create(11, "Aluminum Crate");
+            packageTypeBean.create(12, "Steel Drum");
 
 
             // Assign Sensors to Package Types
@@ -120,6 +122,8 @@ public class ConfigBean {
             orderBean.create(8, 8.1f, OrderState.PROCESSED, Date.from(Instant.now()), Date.from(Instant.now()), 8);
             orderBean.create(9, 9.3f, OrderState.IN_TRANSIT, Date.from(Instant.now()), Date.from(Instant.now()), 9);
             orderBean.create(10, 10.5f, OrderState.SHIPPED, Date.from(Instant.now()), Date.from(Instant.now()), 10);
+            orderBean.create(11, 203.5f, OrderState.SHIPPED, Date.from(Instant.now()), Date.from(Instant.now()), 1);
+            orderBean.create(12, 441.5f, OrderState.SHIPPED, Date.from(Instant.now()), Date.from(Instant.now()), 1);
 
             // Existing Volumes
             for (int i = 1; i <= 12; i++) {
@@ -127,7 +131,6 @@ public class ConfigBean {
             }
 
             // Existing Sensors
-            // Existing Sensors with updated values based on sensor type codes
             sensorBean.create(1, 1, "22.5", Date.from(Instant.now()), 1);  // Temperature Sensor - Temperature value in Celsius
             sensorBean.create(2, 2, "1013.25", Date.from(Instant.now()), 2);  // Atmospheric Pressure Sensor - Pressure in hPa
             sensorBean.create(3, 3, "0.05", Date.from(Instant.now()), 3);  // Accelerometer - Acceleration value in m/s²
