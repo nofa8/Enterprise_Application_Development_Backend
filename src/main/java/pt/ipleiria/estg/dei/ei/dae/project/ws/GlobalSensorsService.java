@@ -6,10 +6,7 @@ import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.ClientDTO;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.SensorDTO;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.SensorDataDTO;
-import pt.ipleiria.estg.dei.ei.dae.project.dtos.SimpleSensorDTO;
+import pt.ipleiria.estg.dei.ei.dae.project.dtos.*;
 import pt.ipleiria.estg.dei.ei.dae.project.ejbs.SensorBean;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.project.entities.Volume;
@@ -34,6 +31,24 @@ public class GlobalSensorsService {
         return SimpleSensorDTO.from(sensorBean.findAll());
     }
 
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/{id}") // means: the relative url path is “/api/clients/”
+    @Authenticated
+    @RolesAllowed("Manager")
+    public SensorDTO getSensor(@PathParam("id") Long sensorId) {
+        return SensorDTO.from(sensorBean.find(sensorId));
+    }
+
+    //List<SensorValueHistory> sensorValueHistories = sensorBean.getSensorHistory(sensorDTO.getCode());
+    //                    List<SensorLogDTO> log = SensorLogDTO.from(sensorValueHistories);
+
+    @GET // means: to call this endpoint, we need to use the HTTP GET method
+    @Path("/{id}/log") // means: the relative url path is “/api/clients/”
+    public List<SensorLogDTO> getSensorHistory(@PathParam("id") Long sensorLogId) {
+        return SensorLogDTO.from(sensorBean.getSensorHistory(sensorLogId));
+    }
+
+
     @POST
     @Path("/{sensorId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -55,7 +70,7 @@ public class GlobalSensorsService {
             sensorBean.createNewSingleValue(sensorDataDTO);
             return Response.ok().build();
         } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            return Response.status(400,sensorBean.find(sensorDataDTO.getCode()).getType().getName())
                     .build();
         }
     }

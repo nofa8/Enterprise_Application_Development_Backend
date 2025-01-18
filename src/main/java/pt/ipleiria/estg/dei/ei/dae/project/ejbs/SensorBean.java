@@ -13,6 +13,7 @@ import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyConstraintViolationExcep
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.project.exceptions.MyEntityNotFoundException;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -99,23 +100,95 @@ public class SensorBean {
 
 
     public void createNewValue(List<SensorDataDTO> sensorDataNew) throws MyEntityNotFoundException {
-       for(SensorDataDTO sensorData : sensorDataNew) {
-           Sensor sensor = entityManager.find(Sensor.class, sensorData.getCode());
-           if(sensor == null){
-               throw new MyEntityNotFoundException("Sensor not found");
-           }
-           sensor.setValue(sensorData.getValue());
-           updateSensorValue(sensor);
-           entityManager.persist(sensor);
-       }
+        for (SensorDataDTO sensorData : sensorDataNew) {
+            Sensor sensor = entityManager.find(Sensor.class, sensorData.getCode());
+            if (sensor == null) {
+                throw new MyEntityNotFoundException("Sensor not found");
+            }
+
+            // Verify the value based on the sensor type
+            if (!isValidSensorValue(sensor.getType().getName(), sensorData.getValue())) {
+                throw new IllegalArgumentException("Invalid value for sensor type: " + sensor.getType());
+            }
+
+            // Update sensor with the verified value
+            sensor.setValue(sensorData.getValue());
+            sensor.setTimestamp(Date.from(Instant.now()));
+            entityManager.persist(sensor);
+            updateSensorValue(sensor);
+        }
     }
+
+
+    private boolean isValidSensorValue(String typename, String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return false; // Null or empty values are not valid
+        }
+
+        try {
+            switch (typename) {
+                case "Temperature Sensor":
+                    // Expecting a numeric value for temperature
+                    double temp = Double.parseDouble(value);
+                    return temp >= -50 && temp <= 150; // Example range in °C
+
+                case "Atmospheric Pressure Sensor":
+                    // Expecting a numeric value for pressure
+                    double pressure = Double.parseDouble(value);
+                    return pressure >= 300 && pressure <= 1100; // Example range in hPa
+
+                case "Accelerometer":
+                    // Expecting a numeric value for accelerometer
+                    double accel = Double.parseDouble(value);
+                    return accel >= 0 && accel < 99999; // Example range in g
+
+                case "Global Positioning Sensor":
+                    // Example: Could validate a coordinate string like "latitude,longitude"
+                    return value.matches("-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?"); // e.g., "40.7128,-74.0060"
+
+                case "Humidity Sensor":
+                    // Expecting a numeric value for humidity
+                    double humidity = Double.parseDouble(value);
+                    return humidity >= 0 && humidity <= 100; // Example range in %
+
+                case "Light Sensor":
+                    // Expecting a numeric value for light intensity
+                    double light = Double.parseDouble(value);
+                    return light >= 0 && light <= 100000; // Example range in lux
+
+                case "Infrared Sensor":
+                    // Expecting a numeric value for infrared
+                    double infrared = Double.parseDouble(value);
+                    return infrared >= 0 && infrared <= 10000; // Example range in arbitrary units
+
+                case "Ultrasonic Sensor":
+                    // Expecting a numeric value for distance
+                    double ultrasonic = Double.parseDouble(value);
+                    return ultrasonic >= 0 && ultrasonic <= 400; // Example range in cm
+
+                default:
+                    throw new IllegalArgumentException("Unknown sensor type: " + typename);
+            }
+        } catch (NumberFormatException e) {
+                // Handle cases where the value cannot be parsed to a number
+                return false;
+        }
+    }
+
+
 
     public void createNewSingleValue(SensorDataDTO sensorData) throws MyEntityNotFoundException {
         Sensor sensor = entityManager.find(Sensor.class, sensorData.getCode());
         if(sensor == null){
             throw new MyEntityNotFoundException("Sensor not found");
         }
+        // Verify the value based on the sensor type
+        if (!isValidSensorValue(sensor.getType().getName(), sensorData.getValue())) {
+            throw new IllegalArgumentException("Invalid value for sensor type: " + sensor.getType());
+        }
+
         sensor.setValue(sensorData.getValue());
+        sensor.setTimestamp(Date.from(Instant.now()));
         updateSensorValue(sensor);
         entityManager.persist(sensor);
     }

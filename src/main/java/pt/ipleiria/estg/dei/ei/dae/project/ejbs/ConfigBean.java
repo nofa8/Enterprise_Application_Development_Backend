@@ -131,7 +131,7 @@ public class ConfigBean {
             sensorBean.create(1, 1, "20", Date.from(Instant.now()), 1);
             sensorBean.create(2, 2, "30", Date.from(Instant.now()), 2);
             sensorBean.create(3, 3, "40", Date.from(Instant.now()), 3);
-            sensorBean.create(4, 4, "50", Date.from(Instant.now()), 4);
+            sensorBean.create(4, 4, "39.908889, -8.821111", Date.from(Instant.now()), 4);
             sensorBean.create(5, 5, "60", Date.from(Instant.now()), 5);
 
             // Existing Products
