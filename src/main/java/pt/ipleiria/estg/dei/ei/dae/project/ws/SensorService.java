@@ -47,32 +47,32 @@ public class SensorService {
     @Context
     private SecurityContext securityContext;
 
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response receiveSensorData(
-//            @PathParam("code_order") Long codeOrder,
-//            @PathParam("code_volume") Long codeVolume,
-//
-//            List<SensorDataDTO> sensorDataNew) {
-//
-//        Volume volume = volumeBean.find(codeVolume);
-//        if(volume == null) {
-//            return Response.status(Response.Status.BAD_REQUEST)
-//                    .build();
-//        }
-//        if(volume.getState()== DELIVERED || volume.getState()== RETURNED){
-//            return Response.status(Response.Status.BAD_REQUEST)
-//                    .build();
-//        }
-//        try {
-//            sensorBean.createNewValue(sensorDataNew);
-//            return Response.ok().build();
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.BAD_REQUEST)
-//                    .build();
-//        }
-//    }
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response receiveSensorData (
+            @PathParam("code_order") Long codeOrder,
+            @PathParam("code_volume") Long codeVolume,
+
+            List<SensorDataDTO> sensorDataNew) throws  MyEntityNotFoundException{
+
+        Volume volume = volumeBean.find(codeVolume);
+        if(volume == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .build();
+        }
+        if(volume.getState()== DELIVERED || volume.getState()== RETURNED){
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .build();
+        }
+        try {
+            sensorBean.createNewValue(sensorDataNew);
+            return Response.ok().build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .build();
+        }
+    }
 
 
     @GET

@@ -68,17 +68,25 @@ public class VolumeService {
     @Path("/{code_volume}")
     @Authenticated
     public Response patchVolume(@PathParam("code_order") Long orderId,
-                                 @PathParam("code_volume") Long volumeId,
-                                 VolumeState state)
+                                @PathParam("code_volume") Long volumeId,
+                                VolumeState state)
             throws MyEntityNotFoundException, MyConstraintViolationException {
         Order order = orderBean.findWithVolumes(orderId);
         if (order == null){
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Order " + orderId + " not found")
+                    .build();
         }
         Volume volume = volumeBean.find(volumeId);
-
+        if (volume == null){
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Volume " + volumeId + " not found")
+                    .build();
+        }
         if(!order.getVolumes().contains(volume)){
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("No volume with id " + volumeId + " in order with id " + orderId)
+                    .build();
         }
         volumeBean.patchState(volumeId,state);
         return Response.ok().build();
